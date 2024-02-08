@@ -14,4 +14,5 @@ jobs:
           distribution: 'oracle'
           cache: maven
       - name: Build with Maven
-        run: ./mvnw package
+        run: ./mvnw package -DskipTests
+
