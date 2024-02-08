@@ -19,7 +19,7 @@ jobs:
       - name: Set up sql server
         run: |
           sudo systemctl start mysql 
-          mysql -h172.18.0.1 --port 8888 -u root -proot
+          mysql --port 8888 -u root -proot
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
