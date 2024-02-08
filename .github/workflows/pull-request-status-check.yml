@@ -19,7 +19,7 @@ jobs:
       - name: Set up sql server
         run: |
           sudo /etc/init.d/mysql start
-          mysql -h localhost --port 3306 -uwebapplication -pwebapplication
+          mysql -h localhost --port 3306 -uwebapplication -proot
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
