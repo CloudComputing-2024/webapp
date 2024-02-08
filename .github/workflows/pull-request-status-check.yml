@@ -17,7 +17,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Set up sql server
-        run: mysql --port 3306 -uwebapplication -pwebapplication
+        run: |
+          sudo /etc/init.d/mysql start
+          mysql -uwebapplication -pwebapplication
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
