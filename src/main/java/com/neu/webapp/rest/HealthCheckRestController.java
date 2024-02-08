@@ -40,7 +40,7 @@ public class HealthCheckRestController {
                 throw new UnexpectedPayloadException("Payload unexpected");
             }
 
-            // responds with HTTP 200 OK status if database connection is successful
+            // respond with HTTP 200 OK status if database connection is successful
             return ResponseEntity.ok()
                                  .header("Cache-Control", "no-cache, no-store, must-revalidate")
                                  .header("Pragma", "no-cache")
