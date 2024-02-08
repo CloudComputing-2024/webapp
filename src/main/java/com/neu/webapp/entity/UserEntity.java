@@ -20,9 +20,10 @@ import java.util.UUID;
 @Accessors(chain = true)
 @ToString
 @Entity
-@Table(name = "users")
+@Table(name = "users") // Specify the name of the table as "users" in the database
 public class UserEntity {
 
+    // id as primary key
     @Id
     @GeneratedValue
     @Column(name = "id", columnDefinition = "BINARY(16)", unique = true, updatable = false, nullable = false)
@@ -52,7 +53,8 @@ public class UserEntity {
     @Column(name = "account_updated")
     private ZonedDateTime accountUpdated;
 
-    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    // Define a many-to-many relationship between users and roles
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(
@@ -65,15 +67,16 @@ public class UserEntity {
 
     }
 
-    public UserEntity(String theEmail, String thePassword) {
-        username = theEmail;
+    public UserEntity(String theUsername, String thePassword) {
+        username = theUsername;
         password = thePassword;
         accountCreated = ZonedDateTime.now(ZoneId.of("UTC"));
         accountUpdated = ZonedDateTime.now(ZoneId.of("UTC"));
 
     }
 
-    public UserEntity( String firstName, String lastName, String password,String username) {
+    // A constructor with arguments for creating a user with username, password, firstname, lastname
+    public UserEntity(String firstName, String lastName, String password, String username) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;

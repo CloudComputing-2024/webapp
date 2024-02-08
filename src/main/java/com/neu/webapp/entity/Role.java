@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "roles")
+@Table(name = "roles") // Specify the name of the table as "roles" in the database
 public class Role {
 
     @Id
