@@ -29,9 +29,17 @@ public class HealthCheckRestController {
             // check for query parameters
             if (!request.getParameterMap().isEmpty()) {
                 return ResponseEntity.badRequest()
-                                     .header("Cache-Control", "no-cache, no-store, must-revalidate")
+                                     .header("Access-Control-Allow-Credentials", "true")
+                                     .header("Access-Control-Allow-Headers", "X-Requested-With,Content-Type,Accept,Origin")
+                                     .header("Access-Control-Allow-Methods", "*")
+                                     .header("Access-Control-Allow-Origin", "*")
+                                     .header("Cache-Control", "no-cache")
+                                     .header("Content-Type", "application/octet-stream")
+                                     .header("Expires", "-1")
+                                     .header("X-Powered-By", "Express")
                                      .header("Pragma", "no-cache")
                                      .header("X-Content-Type-Options", "nosniff")
+                                     .header("Allow", "GET")
                                      .build();
             }
 
@@ -42,9 +50,17 @@ public class HealthCheckRestController {
 
             // respond with HTTP 200 OK status if database connection is successful
             return ResponseEntity.ok()
-                                 .header("Cache-Control", "no-cache, no-store, must-revalidate")
+                                 .header("Access-Control-Allow-Credentials", "true")
+                                 .header("Access-Control-Allow-Headers", "X-Requested-With,Content-Type,Accept,Origin")
+                                 .header("Access-Control-Allow-Methods", "*")
+                                 .header("Access-Control-Allow-Origin", "*")
+                                 .header("Cache-Control", "no-cache")
+                                 .header("Content-Type", "application/octet-stream")
+                                 .header("Expires", "-1")
+                                 .header("X-Powered-By", "Express")
                                  .header("Pragma", "no-cache")
                                  .header("X-Content-Type-Options", "nosniff")
+                                 .header("Allow", "GET")
                                  .build();
         } catch (PersistenceException exception) {
             // throw to SQLException if database connection is unsuccessful
@@ -56,9 +72,17 @@ public class HealthCheckRestController {
     @RequestMapping(value = "/healthz", method = RequestMethod.HEAD)
     public ResponseEntity<String> handleHeadForHealthz() {
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
-                             .header("Cache-Control", "no-cache, no-store, must-revalidate")
+                             .header("Access-Control-Allow-Credentials", "true")
+                             .header("Access-Control-Allow-Headers", "X-Requested-With,Content-Type,Accept,Origin")
+                             .header("Access-Control-Allow-Methods", "*")
+                             .header("Access-Control-Allow-Origin", "*")
+                             .header("Cache-Control", "no-cache")
+                             .header("Content-Type", "application/octet-stream")
+                             .header("Expires", "-1")
+                             .header("X-Powered-By", "Express")
                              .header("Pragma", "no-cache")
                              .header("X-Content-Type-Options", "nosniff")
+                             .header("Allow", "GET")
                              .build();
     }
 
@@ -66,7 +90,14 @@ public class HealthCheckRestController {
     @RequestMapping(value = "/healthz", method = RequestMethod.OPTIONS)
     public ResponseEntity<String> handleOptionsForHealthz() {
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
-                             .header("Cache-Control", "no-cache, no-store, must-revalidate")
+                             .header("Access-Control-Allow-Credentials", "true")
+                             .header("Access-Control-Allow-Headers", "X-Requested-With,Content-Type,Accept,Origin")
+                             .header("Access-Control-Allow-Methods", "*")
+                             .header("Access-Control-Allow-Origin", "*")
+                             .header("Cache-Control", "no-cache")
+                             .header("Content-Type", "application/octet-stream")
+                             .header("Expires", "-1")
+                             .header("X-Powered-By", "Express")
                              .header("Pragma", "no-cache")
                              .header("X-Content-Type-Options", "nosniff")
                              .header("Allow", "GET")

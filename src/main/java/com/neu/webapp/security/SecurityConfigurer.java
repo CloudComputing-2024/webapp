@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfigurer { // define a Spring Security configuration class
@@ -38,7 +39,10 @@ public class SecurityConfigurer { // define a Spring Security configuration clas
                         .anyRequest().authenticated()
                 )
                 .formLogin(Customizer.withDefaults())
-                .httpBasic(Customizer.withDefaults());
+                .httpBasic(Customizer.withDefaults())
+                .headers(headers -> headers
+                        .xssProtection(xss -> xss.disable())
+                );
 
         return http.build();
     }
