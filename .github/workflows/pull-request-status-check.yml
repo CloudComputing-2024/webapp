@@ -19,6 +19,7 @@ jobs:
       - name: Set up sql server
         run: |
           sudo systemctl start mysql
+          mysql -h 127.0.0.1 --port 3306 -uwebapplication -pwebapplication
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
