@@ -93,11 +93,11 @@ public class UserEntity {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", first_Name='" + firstName + '\'' +
-                ", last_Name='" + lastName + '\'' +
+                ", first_name='" + firstName + '\'' +
+                ", last_name='" + lastName + '\'' +
                 ", username='" + username + '\'' +
-                ", account_Created=" + accountCreated +
-                ", account_Updated=" + accountUpdated +
+                ", account_created=" + accountCreated +
+                ", account_updated=" + accountUpdated +
                 '}';
     }
 }
