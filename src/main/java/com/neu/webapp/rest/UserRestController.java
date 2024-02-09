@@ -11,7 +11,9 @@ import com.neu.webapp.entity.UserEntity;
 import com.neu.webapp.repository.RoleRepository;
 import com.neu.webapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -73,7 +75,7 @@ public class UserRestController {
 
         try {
             // convert JasonNode to UserEntity annd check for extra invalid fields
-             updatedUser = objectMapper.treeToValue(requestBody, UserEntity.class);
+            updatedUser = objectMapper.treeToValue(requestBody, UserEntity.class);
         } catch (UnrecognizedPropertyException exception) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (Exception exception) {
@@ -125,7 +127,15 @@ public class UserRestController {
         newUser.setRoles(new ArrayList<>(Collections.singletonList(userRole)));
         userRepository.save(newUser);
 
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
+
+
         // return HttpStatus.CREATED status and user information
-        return ResponseEntity.status(HttpStatus.CREATED).body(newUser.toString());
+        return ResponseEntity.status(HttpStatus.CREATED)
+                             .headers(headers)
+                             .body(newUser.toString());
     }
+
+
 }
