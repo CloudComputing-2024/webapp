@@ -136,10 +136,17 @@ public class UserRestController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
+
+        // check fields that are not allowed to be updated like account_created and account_updated
+        if (theUser.getAccountUpdated() != null || theUser.getAccountCreated() != null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
         // create a new UserEntity for the newUser
         UserEntity newUser = new UserEntity(theUser.getFirstName(), theUser.getLastName(), passwordEncoder.encode(theUser.getPassword()), theUser.getUsername());
         Role userRole = new Role("USER");
         newUser.setRoles(new ArrayList<>(Collections.singletonList(userRole)));
+
         userRepository.save(newUser);
 
         HttpHeaders headers = new HttpHeaders();
