@@ -74,7 +74,7 @@ public class UserRestController {
         UserEntity updatedUser;
 
         try {
-            // convert JasonNode to UserEntity annd check for extra invalid fields
+            // convert JasonNode to UserEntity and check for extra invalid fields
             updatedUser = objectMapper.treeToValue(requestBody, UserEntity.class);
         } catch (UnrecognizedPropertyException exception) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -87,6 +87,7 @@ public class UserRestController {
 
         // Cannot update username
         if (!updatedUser.getUsername().equals(authentication.getName())) {
+            System.out.println("updatedUser: " + updatedUser.getUsername() + "authentication: " + authentication.getName());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -109,7 +110,21 @@ public class UserRestController {
     }
 
     @PostMapping("/v1/user")
-    public ResponseEntity<String> register(@RequestBody UserEntity theUser) {
+    public ResponseEntity<String> register(@RequestBody JsonNode requestBody) {
+
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
+
+        // declare a UserEntity object
+        UserEntity theUser;
+
+        try {
+            // convert JasonNode to UserEntity and check for extra invalid fields
+            theUser = objectMapper.treeToValue(requestBody, UserEntity.class);
+        } catch (UnrecognizedPropertyException exception) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (Exception exception) {
+            throw new IllegalArgumentException();
+        }
 
         // verify if the username is a email format
         if (!emailPattern.matcher(theUser.getUsername()).find()) {
@@ -136,6 +151,4 @@ public class UserRestController {
                              .headers(headers)
                              .body(newUser.toString());
     }
-
-
 }

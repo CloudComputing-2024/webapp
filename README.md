@@ -1,111 +1,64 @@
-# CSYE 6225 - Network Structure & Cloud Computing- Assignment #01
+# Webapp
 
 ## Introduction
 
-The objective of this assignment is to select a technology stack for a backend (API only) web application and to
-implement health check API.
+The webapp, developed in Java and utilizing the Spring Boot framework with a REST architecture, employs Spring JPA for
+database initialization and Hibernate for data management. Hosted on a CentOS 8 AWS EC2 instance server, it utilizes MySQL 8.0.31
+for data storage. Application security is enhanced with Spring Security, implementing Basic authentication to manage
+user information access.
 
 ## Technology Stack
 
 -**Programming Language:** Java
 
--**Relational Database:** MySQL
+-**JDK:** open JDK 17
+
+-**Build Tool**: Maven
+
+-**Relational Database:** MySQL 8.0.31 (Arm64)
 
 -**Backend Framework:** Springboot
 
 -**ORM Framework:** Hibernate (Java)
 
-## API Implementation
+-**Server**: CentOS 8 (AWS EC2 instance)
 
-### Health Check Endpoint
+## Build Instruction
 
-The '/healthz' endpoint in `HealthCheckRestController`is designed to perform a health check of webapp application, focusing on
-database connectivity,
-handling unexpected request payloads and handling HTTP method not allowed exceptions.
+### Pre-Requisites:
+- **Install Java JDK 17**
 
-- **Endpoint:** `@GetMapping("/healthz")`
-- **Functionality:**
-    - Check the database connection by executing a simple query (`SELECT 1`). If the database connection is successful, it proceeds;
-      otherwise, it throws an SQL exception indicating an invalid database connection.
-    - Verify that the request does not contain a query parameters. If the request contains a query parameters, it
-      should return HTTP status code 400 Bad Request.
-    - Verify that the request does not contain an unexpected payload. If the request contains a payload, it throws
-      an `UnexpectedPayloadException`.
-    - Verify that the only HTTP request method supported is GET. Making POST, PUT, DELETE, or PATCH requests should
-      return `HttpRequestMethodNotSupportedException`.
-- **Responses:**
-    - **HTTP 200 OK:** Return if the database connection is successful and no unexpected payload is present. Includes
-      headers to prevent caching and ensure content type options are correctly set.
-    - **Errors:** Throw an `SQLException` if the database connection fails, indicating the service is unavailable.
-    - **Errors:** Return HTTP status code 400 Bad Request if the request contains query parameters, indicating API
-      request contains query parameters.
-    - **Errors:** Throw an `UnexpectedPayloadException` if the request contains a payload, indicating API request
-      contains a payload.
-    - **Errors:** Throw an `HttpRequestMethodNotSupportedException` if HTTP request method is POST, PUT, DELETE, or
-      PATCH, indicating Http request method not supported
+- **Install Maven**
 
-## Global Exception Handling
+- **Install MySQL 8.0.31 and set up database environment**
 
-The application incorporates a `GlobalExceptionHandler` class to manage exceptions across the entire application
-uniformly. This class uses `@ControllerAdvice` to ensure that it catches exceptions thrown by any controller.
+- **Install postman**
 
-### Exception Handlers
+### Steps to Build
 
-- **SQL Exception Handling:** Catch `SQLException` and returns an HTTP 503 Service Unavailable status, indicating
-  failure of database connectivity.
-- **Unexpected Payload Exception Handling:** Catch `UnexpectedPayloadException` for requests with unexpected payloads,
-  returning an HTTP 400 Bad Request status.
-- **HTTP Method Not Allowed Handling:** Catch `HttpRequestMethodNotSupportedException` for requests using unsupported
-  HTTP methods, returning an HTTP 405 Method Not Allowed status.
+- **Clone this repository into the local system** `git clone git@github.com:CloudComputing-2024/webapp.git`
 
-Each handler ensures that appropriate HTTP status codes are returned, along with headers to prevent caching and secure
-content type handling.
+- **Start MySQL Server:** run `sudo systemctl start mysqld.service` to start
+  MySQL server.
 
-## Testing the Application
+- **Build the project:** Use your IDE or a command-line tool to launch the webApp application. For Maven projects,
+  run `./mvnw package -DskipTests` `./mvnw spring-boot:run`
 
-### Unit and Integration Tests
+## Deploy Instruction
 
-Implemented comprehensive tests for healthz check endpoint using Spring's testing framework. These tests validate the
-application's behavior under various scenarios, including database connectivity, handling unexpected payloads, and
-ensuring that HTTP methods are restricted.
+### Prepare the Server
+- **Ensure your AWS EC2 instance running CentOS 8 is set up and running**
+- **Install Java JDK 17 on the server if it's not already installed**
+- **Install MySQL 8.0.31 and set up database environment**
 
-- **Test Setup:** Utilize `MockMvc` for simulating HTTP requests, `@Mock` for mocking dependencies, and `@InjectMocks`
-  for injecting mocked services into the controller under test.
-- **Key Test Scenarios:**
-    - Database connectivity and response handling.
-    - Handling of unexpected payloads with appropriate HTTP status codes.
-    - Verification that unsupported HTTP methods return the correct HTTP status code.
+### Transfer the Executable Zip
+- **Use SCP to transfer the built zip file from local machine to the server** `scp -i /Users/amy/Downloads/Test.pem webapp.zip centos@ec2-44-222-200-64.compute-1.amazonaws.com:/home/centos`
 
-## Instruction to Run the Application
+### Run the application
+- **SSH into your EC2 instance and navigate to the directory where you've transferred the zip file**
+- **Unzip the file** run `sudo yum install unzip`
+- **Start the sql server**: run `sudo systemctl start mysqld.service`
+- **Run the application**: `./mvnw package -DskipTests` `./mvnw spring-boot:run`
+- **Configure Security**: set up security groups in AWS to only allow traffic on necessary ports(like 8080)
+- **Test endpoints in Postman**
 
-- **Start MySQL Server:** run `sudo /usr/local/mysql-8.0.31-macos12-arm64/support-files/./mysql.server start` to start MySQL server.
-- **Start Application:** Use your IDE or a command-line tool to launch the webApp application. For Maven projects,
-  run `./mvnw package` `./mvnw spring-boot:run` in the terminal at project's root directory.
-- **GET Request:** Once the application is running, you can access the /healthz endpoint. Use Postman or a command-line
-  tool , open a new terminal tab `command + T` `curl -vvvv http://localhost:8080/healthz` to make a GET request.
-- **Review the Response:**  A successful check will return an HTTP 200 OK status, indicating the application is running
-  and the database connection is ok.
-- **Add Parameters in Request:** run `curl -vvvv http://localhost:8080/healthz\?key=value`, a successful check will
-  return an HTTP 400 Bad Request status, indicating API request contains unexpected query parameters.
-- **Add Payloads in Request:**
-  run `curl -vvvv -X GET -H "Content-Type: application/json" --data '{"param1":"value1", "param2":"value2"}' http://localhost:8080/healthz`,
-  a successful check will return an HTTP 400 Bad Request status, indicating API request contains unexpected payloads.
-- **POST Request:**
-  run `curl -vvvv -X POST -H "Content-Type: application/json" --data '{"param1":"value1", "param2":"value2"}' http://localhost:8080/healthz`,
-  a successful check will return an HTTP 400 Bad Request status, indicating HTTP Method Not Allowed.
-- **PUT Request:**
-  run `curl -vvvv -X PUT -H "Content-Type: application/json" --data '{"param1":"value1", "param2":"value2"}' http://localhost:8080/healthz`,
-  a successful check will return an HTTP 400 Bad Request status, indicating HTTP Method Not Allowed.
-- **DELETE Request:** run `curl -vvvv -X DELETE http://localhost:8080/healthz`, a successful check will return an HTTP
-  400 Bad Request status, indicating HTTP Method Not Allowed.
-- **PATCH Request:** run `curl -vvvv -X PATCH -H "Content-Type: application/json" -d '{"key":"newValue"}' http://localhost:8080/healthz`, a successful check will return an HTTP 400 Bad Request status, indicating HTTP Method Not Allowed.
-- **Shut Down MySQL server:** run `sudo /usr/local/mysql-8.0.31-macos12-arm64/bin/mysqladmin -u root --port 3306 shutdown -p` to shut MySQL server.
-- **GET Request:** Once the application is running, you can access the /healthz endpoint. Use Postman or a command-line
-  tool `curl -vvvv http://localhost:8080/healthz` to make a GET request.
-- **Review the Response:**  A successful check will return an HTTP 503 Service Unavailable status, indicating the
-  application database connection is lost.
-- **Start MySQL Server:** run `sudo /usr/local/mysql-8.0.31-macos12-arm64/support-files/./mysql.server start` to start MySQL server again.
-- **GET Request:** Once the application is running, you can access the /healthz endpoint. Use Postman or a command-line
-  tool `curl -vvvv http://localhost:8080/healthz` to make a GET request.
-- **Review the Response:**  A successful check will return an HTTP 200 OK status, indicating the application is running
-  and the database connection is ok.
