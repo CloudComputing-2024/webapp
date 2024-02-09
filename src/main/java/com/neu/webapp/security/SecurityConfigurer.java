@@ -40,9 +40,12 @@ public class SecurityConfigurer { // define a Spring Security configuration clas
                 )
                 .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())
-                .headers(headers -> headers
-                        .xssProtection(xss -> xss.disable())
-                );
+                .headers((headers) -> {
+                    headers
+                            .frameOptions((frameOptions) -> frameOptions.disable())
+                            .contentTypeOptions((contentTypeOptions) -> contentTypeOptions.disable());
+                });
+
 
         return http.build();
     }
@@ -58,4 +61,5 @@ public class SecurityConfigurer { // define a Spring Security configuration clas
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 }

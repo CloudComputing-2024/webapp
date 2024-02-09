@@ -82,7 +82,7 @@ public class UserEntity {
         this.firstName = firstName;
         this.lastName = lastName;
         accountCreated = ZonedDateTime.now(ZoneId.of("UTC"));
-        accountUpdated = ZonedDateTime.now(ZoneId.of("UTC"));
+        accountUpdated = accountCreated;
     }
 
     public void setAccountUpdated() {
