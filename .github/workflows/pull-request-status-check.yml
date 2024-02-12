@@ -13,6 +13,10 @@ jobs:
           java-version: '17'
           distribution: 'oracle'
           cache: maven
+      - name: Trt to fail
+        run: exit 1
+
       - name: Build with Maven
         run: ./mvnw package -DskipTests
+
 
