@@ -1,0 +1,21 @@
+name: Integration Tests
+
+on: [pull_request]
+
+jobs:
+  integration-tests:
+    runs-on: ubuntu-latest
+
+    env:
+      DB_DATABASE: web_application
+      DB_USER: webapplication
+      DB_PASSWORD: webapplication
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Start MySQL
+        run: |
+          sudo /etc/init.d/mysql start
+          mysql -e "CREATE DATABASE IF NOT EXISTS $DB_DATABASE;" -u$DB_USER -p$DB_PASSWORD
