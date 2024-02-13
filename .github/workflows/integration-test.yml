@@ -9,7 +9,7 @@ jobs:
     env:
       DB_DATABASE: web_application
       DB_USER: root
-      DB_PASSWORD:
+      DB_PASSWORD: root
 
     steps:
       - name: Checkout
