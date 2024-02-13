@@ -9,7 +9,7 @@ jobs:
     env:
       DB_DATABASE: web_application
       DB_USER: root
-      DB_PASSWORD: root
+      DB_PASSWORD:
 
     steps:
       - name: Checkout
@@ -21,7 +21,7 @@ jobs:
 
       - name: Create User and Database
         run: |
-          mysql -e "CREATE USER 'webapplication'@'localhost' IDENTIFIED BY 'webapplication';"-u$DB_USER -p$DB_PASSWORD
-          mysql -e "CREATE DATABASE IF NOT EXISTS web_application;" -u$DB_USER -p$DB_PASSWORD
-          mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'web_application'@'localhost' WITH GRANT OPTION;" -u$DB_USER -p$DB_PASSWORD
-          mysql -e "FLUSH PRIVILEGES;" -u$DB_USER -p$DB_PASSWORD
+          mysql -e "CREATE USER 'webapplication'@'localhost' IDENTIFIED BY 'webapplication';"-u$DB_USER 
+          mysql -e "CREATE DATABASE IF NOT EXISTS web_application;" -u$DB_USER 
+          mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'web_application'@'localhost' WITH GRANT OPTION;" -u$DB_USER 
+          mysql -e "FLUSH PRIVILEGES;" -u$DB_USER
