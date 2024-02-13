@@ -8,8 +8,8 @@ jobs:
 
     env:
       DB_DATABASE: web_application
-      DB_USER: webapplication
-      DB_PASSWORD: webapplication
+      DB_USER: root
+      DB_PASSWORD: root
 
     steps:
       - name: Checkout
