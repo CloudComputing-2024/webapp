@@ -74,9 +74,9 @@ public class UserRestControllerIntegrationTests {
 
     @Test
     public void testUpdateAndValidateUser() throws Exception {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
         // Step 1: Encrypt the password and create the user
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encryptedPassword = passwordEncoder.encode("123");
         UserEntity user = new UserEntity("Amy", "Wei", encryptedPassword, "amy.wei@gmail.com");
         // save user to repository
