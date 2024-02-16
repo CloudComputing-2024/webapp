@@ -59,11 +59,12 @@ public class UserRestController {
     }
 
     @GetMapping("/v1/user/self")
-    public ResponseEntity<String> login(Authentication authentication) {
+    public ResponseEntity<String> login(Authentication authentication) throws JsonProcessingException {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         UserEntity user = userRepository.findByUsername(authentication.getName())
                                         .orElseThrow(() -> new UsernameNotFoundException("Username is not found"));
-        return ResponseEntity.status(HttpStatus.OK).body(user.toString());
+        String json = objectMapper.writeValueAsString(user);
+        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(json);
     }
 
     @PutMapping("/v1/user/self")
@@ -110,7 +111,7 @@ public class UserRestController {
     }
 
     @PostMapping("/v1/user")
-    public ResponseEntity<String> register(@RequestBody JsonNode requestBody) {
+    public ResponseEntity<String> register(@RequestBody JsonNode requestBody) throws JsonProcessingException {
 
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
 
@@ -154,8 +155,7 @@ public class UserRestController {
 
 
         // return HttpStatus.CREATED status and user information
-        return ResponseEntity.status(HttpStatus.CREATED)
-                             .headers(headers)
-                             .body(newUser.toString());
+        String json = objectMapper.writeValueAsString(newUser);
+        return ResponseEntity.status(HttpStatus.CREATED).contentType(MediaType.APPLICATION_JSON).body(json);
     }
 }
