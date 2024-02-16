@@ -6,13 +6,11 @@ import io.restassured.RestAssured;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Optional;
@@ -20,7 +18,8 @@ import java.util.Optional;
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
-
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class UserRestControllerIntegrationTests {
 
     @LocalServerPort
@@ -29,7 +28,7 @@ public class UserRestControllerIntegrationTests {
     @Autowired
     private UserRepository userRepository;
 
-    @AfterEach
+    @AfterAll
      void cleanupTestData() {
         Optional<UserEntity> user = userRepository.findByUsername("test@gmail.com");
 
@@ -42,6 +41,7 @@ public class UserRestControllerIntegrationTests {
 
     // Test 1 - Use POST call to create an account, and using the GET call, validate account exists.
     @Test
+    @Order(1)
     void testCreateUserAndValidateUser() {
 
         String postUrl = "http://localhost:" + port + "/v1/user";
@@ -79,13 +79,14 @@ public class UserRestControllerIntegrationTests {
 
     // Test 2 - Update the account and using the GET call, validate the account was updated.
     @Test
+    @Order(2)
     void testUpdateAndValidateUser() {
 
         // create a test user and save it into db
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String encryptPassword = passwordEncoder.encode("test_password");
-        UserEntity user = new UserEntity("test_firstname", "test_lastname", encryptPassword, "test@gmail.com");
-        userRepository.save(user);
+//        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+//        String encryptPassword = passwordEncoder.encode("test_password");
+//        UserEntity user = new UserEntity("test_firstname", "test_lastname", encryptPassword, "test@gmail.com");
+//        userRepository.save(user);
 
         String putUrl = "http://localhost:" + port + "/v1/user/self";
 
