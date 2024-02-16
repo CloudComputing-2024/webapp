@@ -1,5 +1,6 @@
 package com.neu.webapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -33,7 +34,7 @@ public class UserEntity {
     @Column(name = "username")
     private String username;
 
-    @JsonProperty("password")
+    @JsonProperty(value = "password",access = JsonProperty.Access.WRITE_ONLY)
     @Column(name = "password")
     private String password;
 
@@ -54,6 +55,7 @@ public class UserEntity {
     private ZonedDateTime accountUpdated;
 
     // Define a many-to-many relationship between users and roles
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "users_roles",
@@ -87,6 +89,15 @@ public class UserEntity {
 
     public void setAccountUpdated() {
         this.accountUpdated = ZonedDateTime.now(ZoneId.of("UTC"));
+    }
+
+    @JsonIgnore
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override

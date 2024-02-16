@@ -1,123 +1,118 @@
 package com.neu.webapp;
 
 import com.neu.webapp.entity.UserEntity;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import com.neu.webapp.repository.UserRepository;
+import io.restassured.RestAssured;
+import jakarta.persistence.EntityNotFoundException;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Objects;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-@SpringBootTest(classes = WebappApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
+)
+@Transactional
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class UserRestControllerIntegrationTests {
 
-    private static RestTemplate restTemplate;
-
     @LocalServerPort
-    private int port;
-
-    private String baseUrl = "http://localhost";
+    private Integer port;
 
     @Autowired
-    private TestH2Repository h2Repository;
+    private UserRepository userRepository;
 
-    @BeforeAll
-    public static void init() {
-        restTemplate = new RestTemplate();
+    @AfterAll
+     void cleanupTestData() {
+        Optional<UserEntity> user = userRepository.findByUsername("test@gmail.com");
+
+        if (user.isPresent()) {
+            userRepository.delete(user.get());
+        } else {
+            throw new EntityNotFoundException();
+        }
     }
 
+    // Test 1 - Use POST call to create an account, and using the GET call, validate account exists.
     @Test
-    public void testCreateUserAndValidateUser() throws Exception {
+    @Order(1)
+    void testCreateUserAndValidateUser() {
 
-        // post call url
-        String createUserUrl = baseUrl + ":" + port + "/v1/user";
+        String postUrl = "http://localhost:" + port + "/v1/user";
 
-        // step1:  create a newUser using POST call
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<String> entity = new HttpEntity<>("{\"username\":\"jiapan.wei@gmail.com\",\"password\":\"123\",\"first_name\":\"Jiapan\",\"last_name\":\"Wei\"}", headers);
-        ResponseEntity<String> createUserResponse = restTemplate.exchange(createUserUrl, HttpMethod.POST, entity, String.class);
+        // new user's information
+        String newUserInfo = "{\"username\":\"test@gmail.com\",\"password\":\"test_password\",\"first_name\":\"test_firstname\",\"last_name\":\"test_lastname\"}";
 
-        // assert the createUserResponse Http status code is 201, if it is 201, newUser is successfully created
-        assertEquals(HttpStatus.CREATED, createUserResponse.getStatusCode());
-        assertTrue(Objects.requireNonNull(createUserResponse.getBody()).contains("username='jiapan.wei@gmail.com'"));
-        assertEquals(1, h2Repository.findAll().size());
+        // use POST call to create an account
+        RestAssured
+                .given()
+                .contentType("application/json")
+                .body(newUserInfo)
+                .when()
+                .post(postUrl)
+                .then()
+                .statusCode(201).extract();
 
-        // step2: validate newUser existence using GET call
+        String getUrl = "http://localhost:" + port + "/v1/user/self";
 
-        // get call url
-        String validateUserUrl = baseUrl + ":" + port + "/v1/user/self";
-
-        // use newUser username and password to set basic auth
-        HttpHeaders validateUserHeaders = new HttpHeaders();
-        validateUserHeaders.setBasicAuth("jiapan.wei@gmail.com", "123");
-        HttpEntity<String> validateUserEntity = new HttpEntity<>(validateUserHeaders);
-
-        // use GET call to log in newUser
-        ResponseEntity<String> validateUserResponse = restTemplate.exchange(validateUserUrl, HttpMethod.GET, validateUserEntity, String.class);
-
-        // assert the HTTP status code for validate newUser existence is 200, if it is 200 meaning newUser exists in database
-        assertEquals(HttpStatus.OK, validateUserResponse.getStatusCode());
-
-        // check if the response contains the user's correct information to validate existence
-        assertTrue(Objects.requireNonNull(validateUserResponse.getBody()).contains("username='jiapan.wei@gmail.com'"));
-        assertTrue(Objects.requireNonNull(validateUserResponse.getBody()).contains("first_name='Jiapan'"));
-        assertTrue(Objects.requireNonNull(validateUserResponse.getBody()).contains("last_name='Wei'"));
+        // use the GET call to validate account exists
+        RestAssured
+                .given()
+                .auth().preemptive().basic("test@gmail.com", "test_password")
+                .when()
+                .get(getUrl)
+                .then()
+                .statusCode(200)
+                .body("id", Matchers.notNullValue())
+                .body("first_name", Matchers.equalTo("test_firstname"))
+                .body("last_name", Matchers.equalTo("test_lastname"))
+                .body("account_created", Matchers.notNullValue())
+                .body("account_updated", Matchers.notNullValue())
+                .body("username", Matchers.equalTo("test@gmail.com"));
     }
 
+    // Test 2 - Update the account and using the GET call, validate the account was updated.
     @Test
-    public void testUpdateAndValidateUser() throws Exception {
+    @Order(2)
+    void testUpdateAndValidateUser() {
 
-        // Step 1: Encrypt the password and create the user
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String encryptedPassword = passwordEncoder.encode("123");
-        UserEntity user = new UserEntity("Amy", "Wei", encryptedPassword, "amy.wei@gmail.com");
-        // save user to repository
-        h2Repository.save(user);
+        String putUrl = "http://localhost:" + port + "/v1/user/self";
 
-        // step 2: use update call to update user
-        // PUT call url
-        String updateUserUrl = baseUrl + ":" + port + "/v1/user/self";
+        // updated user's information
+        String updatedUserInfo = "{\"username\":\"test@gmail.com\",\"password\":\"updatePassword\",\"first_name\":\"update_firstname\",\"last_name\":\"update_lastname\"}";
 
-        // use user's username and password to set basic auth
-        HttpHeaders updateUserHeaders = new HttpHeaders();
-        updateUserHeaders.setContentType(MediaType.APPLICATION_JSON);
-        updateUserHeaders.setBasicAuth("amy.wei@gmail.com", "123");
+        // use PUT call to update the user
+        RestAssured
+                .given()
+                .auth().preemptive().basic("test@gmail.com", "test_password")
+                .contentType("application/json")
+                .body(updatedUserInfo)
+                .when()
+                .put(putUrl)
+                .then()
+                .statusCode(204);
 
-        // set user's new information
-        HttpEntity<String> updateUserEntity = new HttpEntity<>("{\"username\":\"amy.wei@gmail.com\",\"password\":\"updatePassword\",\"first_name\":\"updateFirstName\",\"last_name\":\"updateLastName\"}", updateUserHeaders);
+        String getUrl = putUrl;
 
-        // use PUT call to update user's information
-        ResponseEntity<String> updateUserResponse = restTemplate.exchange(updateUserUrl, HttpMethod.PUT, updateUserEntity, String.class);
-
-        // assert the HTTP status code for update user information successfully is 204 NO_CONTENT
-        assertEquals(HttpStatus.NO_CONTENT, updateUserResponse.getStatusCode());
-
-        // step 3: use GET method to validate user info is updated
-        // get call url
-        String validateUserUrl = baseUrl + ":" + port + "/v1/user/self";
-
-        // use user's username and updated password to set basic auth
-        HttpHeaders validateUserHeaders = new HttpHeaders();
-        validateUserHeaders.setBasicAuth(user.getUsername(), "updatePassword");
-        HttpEntity<String> validateUserEntity = new HttpEntity<>(validateUserHeaders);
-
-        // use GET call to log in updated user
-        ResponseEntity<String> validateUserResponse = restTemplate.exchange(validateUserUrl, HttpMethod.GET, validateUserEntity, String.class);
-
-        // assert the HTTP status code for successfully login is 200, if it is 200 meaning updated user can use new password to login
-        assertEquals(HttpStatus.OK, validateUserResponse.getStatusCode());
-
-        // check if the response contains correct updated user's information
-        assertTrue(Objects.requireNonNull(validateUserResponse.getBody()).contains("username='amy.wei@gmail.com'"));
-        assertTrue(Objects.requireNonNull(validateUserResponse.getBody()).contains("first_name='updateFirstName'"));
-        assertTrue(Objects.requireNonNull(validateUserResponse.getBody()).contains("last_name='updateLastName'"));
+        // use the GET call to login with new password and validate the account was updated.
+        RestAssured
+                .given()
+                .auth().preemptive().basic("test@gmail.com", "updatePassword")
+                .when()
+                .get(getUrl)
+                .then()
+                .statusCode(200)
+                .body("id", Matchers.notNullValue())
+                .body("first_name", Matchers.equalTo("update_firstname"))
+                .body("last_name", Matchers.equalTo("update_lastname"))
+                .body("account_created", Matchers.notNullValue())
+                .body("account_updated", Matchers.notNullValue())
+                .body("username", Matchers.equalTo("test@gmail.com"));
     }
 }
