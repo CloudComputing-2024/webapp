@@ -4,14 +4,11 @@ import com.neu.webapp.entity.UserEntity;
 import com.neu.webapp.repository.UserRepository;
 import io.restassured.RestAssured;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.context.annotation.DependsOn;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Optional;
 
@@ -20,7 +17,6 @@ import java.util.Optional;
 )
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Transactional
 public class UserRestControllerIntegrationTests {
 
     @LocalServerPort

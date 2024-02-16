@@ -42,4 +42,4 @@ jobs:
 
       - name: Test with Maven
 
-        run: mvn -B verify -Dtest=UserRestControllerIntegrationTests
+        run: mvn -B package --file pom.xml
