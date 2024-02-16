@@ -9,6 +9,7 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
@@ -80,12 +81,6 @@ public class UserRestControllerIntegrationTests {
     @Test
     @Order(2)
     void testUpdateAndValidateUser() {
-
-        // create a test user and save it into db
-//        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-//        String encryptPassword = passwordEncoder.encode("test_password");
-//        UserEntity user = new UserEntity("test_firstname", "test_lastname", encryptPassword, "test@gmail.com");
-//        userRepository.save(user);
 
         String putUrl = "http://localhost:" + port + "/v1/user/self";
 
