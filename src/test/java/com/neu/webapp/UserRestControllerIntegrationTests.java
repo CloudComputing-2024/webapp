@@ -20,6 +20,7 @@ import java.util.Optional;
 )
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Transactional
 public class UserRestControllerIntegrationTests {
 
     @LocalServerPort
