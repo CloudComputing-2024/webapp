@@ -4,6 +4,7 @@ import com.neu.webapp.entity.UserEntity;
 import com.neu.webapp.repository.UserRepository;
 import io.restassured.RestAssured;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ import java.util.Optional;
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
+@Transactional
 public class UserRestControllerIntegrationTests {
 
     @LocalServerPort
@@ -77,11 +79,11 @@ public class UserRestControllerIntegrationTests {
     @Test
     void testUpdateAndValidateUser() {
 
-        // create a test user and save it into db
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String encryptPassword = passwordEncoder.encode("test_password");
-        UserEntity user = new UserEntity("test_firstname", "test_lastname", encryptPassword, "test@gmail.com");
-        userRepository.save(user);
+//        // create a test user and save it into db
+//        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+//        String encryptPassword = passwordEncoder.encode("test_password");
+//        UserEntity user = new UserEntity("test_firstname", "test_lastname", encryptPassword, "test@gmail.com");
+//        userRepository.save(user);
 
         String putUrl = "http://localhost:" + port + "/v1/user/self";
 
