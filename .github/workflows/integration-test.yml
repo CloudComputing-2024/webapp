@@ -33,7 +33,10 @@ jobs:
               username VARCHAR(50) NOT NULL,
               password VARCHAR(50) NOT NULL,
               email VARCHAR(100),
-              created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+              account_created VARCHAR(100),
+              account_updated VARCHAR(100),
+              first_name VARCHAR(100),
+              last_name VARCHAR(100)
           );" -u$DB_USER -p$DB_PASSWORD
 
       - name: Set up JDK 17
