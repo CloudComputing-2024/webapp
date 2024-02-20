@@ -23,10 +23,13 @@ jobs:
           version: "latest"
 
       - name: packer ini
-        run: packer init ./packer/gcp.pkr.hcl
+        run: packer init gcp.pkr.hcl
+        working-directory: ./packer
 
       - name: packer fmt
-        run:  packer fmt ./packer/gcp.pkr.hcl
+        run:  packer fmt gcp.pkr.hcl
+        working-directory: ./packer
 
       - name: packer validate
-        run: packer validate -var 'project_id="csye6225-414206"' ./packer/gcp.pkr.hcl
+        run: packer validate -var 'project_id="csye6225-414206"' gcp.pkr.hcl
+        working-directory: ./packer
