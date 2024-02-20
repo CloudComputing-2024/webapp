@@ -31,6 +31,7 @@ jobs:
       - name: Use gcloud CLI
         run: gcloud info
 
+
       - name: Start MySQL
         run: |
           sudo /etc/init.d/mysql start
