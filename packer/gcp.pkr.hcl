@@ -56,7 +56,7 @@ build {
   # }
 
    provisioner "shell" {
-     script = "appDirSetup.sh"
+     script = "scripts/appDirSetup.sh"
    }
 
    provisioner "file" {
@@ -65,14 +65,14 @@ build {
    }
 
   # create a local user
-  provisioner "shell" {
-    script = "createLocalUser.sh"
-  }
+#  provisioner "shell" {
+#    script = "scripts/createLocalUser.sh"
+#  }
 
-  # # install jdk 17
-  # provisioner "shell" {
-  #   script = "installJDK.sh"
-  # }
+#   # install jdk 17
+#   provisioner "shell" {
+#     script = "scripts/installJDK.sh"
+#   }
 
   # # install mysql
   # provisioner "shell" {
