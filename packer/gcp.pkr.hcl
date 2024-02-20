@@ -55,14 +55,14 @@ build {
   #   script = "updateOs.sh"
   # }
 
-#   provisioner "shell" {
-#     script = "appDirSetup.sh"
-#   }
-#
-#   provisioner "file" {
-#     source      = "app.properties"
-#     destination = "/opt/myapp/app.properties"
-#   }
+   provisioner "shell" {
+     script = "appDirSetup.sh"
+   }
+
+   provisioner "file" {
+     source      = "webapp/"
+     destination = "/opt/webapp"
+   }
 
   # create a local user
   provisioner "shell" {
