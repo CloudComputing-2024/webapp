@@ -41,8 +41,7 @@ jobs:
 
       - name: Prepare artifacts for Packer
         run: |
-          mkdir -p ./packer/artifacts
-          cp ./target/*.jar ./packer/artifacts
+          cp ./target/*.jar ./packer/webapp
 
       - name: Build custom image with Packer
         run: |

@@ -60,8 +60,8 @@ build {
    }
 
    provisioner "file" {
-     source      = "artifact/*.jar"
-     destination = "/opt/webapp/*.jar"
+     source      = "/webapp/"
+     destination = "/opt/webapp"
    }
 
   # create a local user
