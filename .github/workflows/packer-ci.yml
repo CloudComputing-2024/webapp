@@ -1,4 +1,4 @@
-ame: Packer Continuous Integration
+name: Packer Continuous Integration
 
 on: [pull_request]
 
