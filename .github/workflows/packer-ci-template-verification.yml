@@ -4,7 +4,7 @@ on: [pull_request]
 
 jobs:
   packer_checks:
-    name: Packer CI Status Checks
+    name: Packer Template Verification
     runs-on: ubuntu-latest
 
     env:
