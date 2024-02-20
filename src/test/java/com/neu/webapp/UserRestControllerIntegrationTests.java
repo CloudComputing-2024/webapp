@@ -69,7 +69,7 @@ public class    UserRestControllerIntegrationTests {
                 .then()
                 .statusCode(200)
                 .body("id", Matchers.notNullValue())
-                .body("first_name", Matchers.equalTo("test_firstname"))
+                .body("first_name", Matchers.equalTo("demo_firstname"))
                 .body("last_name", Matchers.equalTo("test_lastname"))
                 .body("account_created", Matchers.notNullValue())
                 .body("account_updated", Matchers.notNullValue())
