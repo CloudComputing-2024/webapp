@@ -1,0 +1,32 @@
+ame: Packer Continuous Integration
+
+on: [pull_request]
+
+jobs:
+  packer_checks:
+    name: Packer CI Checks
+    runs-on: ubuntu-latest
+
+    env:
+      DB_DATABASE: web_application
+      DB_USER: webapplication
+      DB_PASSWORD: webapplication
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Packer
+        uses: hashicorp/setup-packer@main
+        id: setup
+        with:
+          version: "latest"
+
+      - name: packer ini
+        run: packer init ./packer/gcp.pkr.hcl
+
+      - name: packer fmt
+        run:  packer fmt ./packer/gcp.pkr.hcl
+
+      - name: packer validate
+        run: packer validate ./packer/gcp.pkr.hcl
