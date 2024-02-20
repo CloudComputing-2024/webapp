@@ -1,0 +1,41 @@
+name: Packer Custom Image Build
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup gcloud CLI
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.PACKER_SERVICE_ACCOUNT }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Use gcloud CLI
+        run: gcloud info
+
+#
+#      - name: Run integration tests
+#        run: |
+#          echo "Integration tests placeholder"
+#
+#      - name: Build application artifact
+#        run: |
+#          echo "Build artifact placeholder"
+#
+#      - name: Build custom image with Packer
+#        run: |
+#          packer init .
+#          packer build -var 'project_id=${{ secrets.GCP_PROJECT_ID }}' ./packer/gcp.pkr.hcl
+#        working-directory: ./packer

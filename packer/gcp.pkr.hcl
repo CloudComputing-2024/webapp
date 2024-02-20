@@ -55,14 +55,19 @@ build {
   #   script = "updateOs.sh"
   # }
 
-  # provisioner "shell" {
-  #   script = "appDirSetup.sh"
-  # }
+#   provisioner "shell" {
+#     script = "appDirSetup.sh"
+#   }
+#
+#   provisioner "file" {
+#     source      = "app.properties"
+#     destination = "/opt/myapp/app.properties"
+#   }
 
-  # provisioner "file" {
-  #   source      = "app.properties"
-  #   destination = "/opt/myapp/app.properties"
-  # }
+  # create a local user
+  provisioner "shell" {
+    script = "createLocalUser.sh"
+  }
 
   # # install jdk 17
   # provisioner "shell" {
@@ -94,8 +99,5 @@ build {
   #   script = "setUpJavaHomeVar.sh"
   # }
 
-  # create a local user
-  provisioner "shell" {
-    script = "createLocalUser.sh"
-  }
+
 }
