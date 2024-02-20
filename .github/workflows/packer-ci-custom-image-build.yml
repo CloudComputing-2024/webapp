@@ -8,6 +8,12 @@ on:
 jobs:
   packer-build-custom-image:
     runs-on: ubuntu-latest
+
+    env:
+      DB_DATABASE: web_application
+      DB_USER: webapplication
+      DB_PASSWORD: webapplication
+
     steps:
 
       - name: Checkout code
