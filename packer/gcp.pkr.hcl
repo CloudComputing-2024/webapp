@@ -38,8 +38,8 @@ source "googlecompute" "csye6255-webapp-custom-image" {
   disk_size               = var.disk_size
   disk_type               = var.disk_type
   image_name              = "csye6225-{{timestamp}}"
-  image_description       = "CSYE6255 webapp Custom Image"
-  image_family            = "csye6255-webapp-image"
+  image_description       = "CSYE6225 webapp Custom Image"
+  image_family            = "csye6225-webapp-image"
   image_project_id        = var.project_id
   image_storage_locations = ["us"]
   ssh_username            = "packer"

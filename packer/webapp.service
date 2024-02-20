@@ -1,0 +1,14 @@
+[Unit]
+Description=webapp application
+After=syslog.target
+
+[Service]
+User=csye6225
+Group=csye6225
+ExecStart=/opt/webapp.jar
+SuccessExitStatus=143
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
