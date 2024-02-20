@@ -25,6 +25,7 @@ jobs:
       - name: Use gcloud CLI
         run: gcloud info
 
+#
 #      - name: Run integration tests
 #        run: |
 #          echo "Integration tests placeholder"
