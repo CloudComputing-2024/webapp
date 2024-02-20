@@ -1,6 +1,6 @@
 set -e
 
-DIR="/opt/webapp"
+DIR="/opt"
 
 sudo mkdir -p "${DIR}"
 
