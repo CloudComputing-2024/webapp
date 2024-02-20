@@ -57,6 +57,7 @@ user information access.
 ### Run the application
 - **SSH into your EC2 instance and navigate to the directory where you've transferred the zip file**
 - **Unzip the file** run `sudo yum install unzip`
+- test
 - **Start the sql server**: run `sudo systemctl start mysqld.service`
 - **Run the application**: `./mvnw package -DskipTests` `./mvnw spring-boot:run`
 - **Configure Security**: set up security groups in AWS to only allow traffic on necessary ports(like 8080)
