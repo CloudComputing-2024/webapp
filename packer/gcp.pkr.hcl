@@ -55,24 +55,24 @@ build {
   #   script = "updateOs.sh"
   # }
 
-#   provisioner "shell" {
-#     script = "appDirSetup.sh"
-#   }
-#
-#   provisioner "file" {
-#     source      = "app.properties"
-#     destination = "/opt/myapp/app.properties"
-#   }
+   provisioner "shell" {
+     script = "scripts/appDirSetup.sh"
+   }
+
+   provisioner "file" {
+     source      = "webapp/"
+     destination = "/opt/webapp"
+   }
 
   # create a local user
-  provisioner "shell" {
-    script = "createLocalUser.sh"
-  }
+#  provisioner "shell" {
+#    script = "scripts/createLocalUser.sh"
+#  }
 
-  # # install jdk 17
-  # provisioner "shell" {
-  #   script = "installJDK.sh"
-  # }
+#   # install jdk 17
+#   provisioner "shell" {
+#     script = "scripts/installJDK.sh"
+#   }
 
   # # install mysql
   # provisioner "shell" {

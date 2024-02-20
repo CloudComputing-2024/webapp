@@ -25,17 +25,26 @@ jobs:
       - name: Use gcloud CLI
         run: gcloud info
 
-#
-#      - name: Run integration tests
-#        run: |
-#          echo "Integration tests placeholder"
-#
-#      - name: Build application artifact
-#        run: |
-#          echo "Build artifact placeholder"
-#
-#      - name: Build custom image with Packer
-#        run: |
-#          packer init .
-#          packer build -var 'project_id=${{ secrets.GCP_PROJECT_ID }}' ./packer/gcp.pkr.hcl
-#        working-directory: ./packer
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'oracle'
+          cache: maven
+
+      - name: Run integration tests
+        run: mvn test -Dtest=UserRestControllerIntegrationTests
+
+      - name: Build application artifact
+        run: |
+          mvn clean package
+
+      - name: Prepare artifacts for Packer
+        run: |
+          cp ./target/*.jar ./packer/webapp
+
+      - name: Build custom image with Packer
+        run: |
+          packer init .
+          packer build -var 'project_id=csye6225-414206' ./packer/gcp.pkr.hcl
+        working-directory: ./packer
