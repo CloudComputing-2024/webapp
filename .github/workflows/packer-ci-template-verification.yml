@@ -4,7 +4,7 @@ on: [pull_request]
 
 jobs:
   packer_checks:
-    name: Packer CI Checks
+    name: Packer CI Status Checks
     runs-on: ubuntu-latest
 
     env:
