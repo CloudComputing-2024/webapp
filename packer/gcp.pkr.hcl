@@ -64,11 +64,6 @@ build {
     destination = "/opt/webapp"
   }
 
-  # create a local user
-  provisioner "shell" {
-    script = "scripts/createLocalUser.sh"
-  }
-
   # install jdk 17
   provisioner "shell" {
     script = "scripts/installJDK.sh"
@@ -101,6 +96,11 @@ build {
 
   provisioner "shell" {
     script = "scripts/unzipFile.sh"
+  }
+
+  # create a local user
+  provisioner "shell" {
+    script = "scripts/createLocalUser.sh"
   }
 
   provisioner "file" {
