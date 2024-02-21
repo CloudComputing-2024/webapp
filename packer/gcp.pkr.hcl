@@ -105,7 +105,7 @@ build {
 
   provisioner "file" {
     source      = "webapp.service"
-    destination = "/temp/webapp.service"
+    destination = "/opt/webapp.service"
   }
 
   provisioner "shell" {
