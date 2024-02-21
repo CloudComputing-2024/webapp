@@ -105,7 +105,7 @@ build {
 
   provisioner "file" {
     source      = "webapp.service"
-    destination = "/etc/systemd/system/webapp.service"
+    destination = "/temp/webapp.service"
   }
 
   provisioner "shell" {
