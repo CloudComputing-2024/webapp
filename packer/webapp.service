@@ -1,6 +1,6 @@
 [Unit]
 Description=webapp application
-After=syslog.target
+After=network.target
 
 [Service]
 User=csye6225
