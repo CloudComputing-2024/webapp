@@ -7,8 +7,7 @@ on:
 
 jobs:
   packer-build-custom-image:
-
-    runs-on: ubuntu-18.4
+    runs-on: ubuntu-latest
 
     env:
       DB_DATABASE: web_application
