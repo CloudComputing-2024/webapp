@@ -67,7 +67,8 @@ jobs:
 
       - name: Zip artifacts
         run: |
-          zip -r webapp.zip ./target/*.jar
+          cd target
+          zip -r ../webapp.zip *.jar
 
       - name: Create webapp directory placeholder
         run: mkdir -p packer/webapp

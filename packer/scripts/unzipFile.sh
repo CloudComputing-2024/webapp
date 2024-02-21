@@ -1,2 +1,7 @@
 cd /opt/webapp
-unzip webapp.zipgit
+
+ls -al
+
+unzip webapp.zip
+
+ls -al
