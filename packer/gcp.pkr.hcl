@@ -100,7 +100,7 @@ build {
   }
 
   provisioner "shell" {
-    source = "scripts/unzipFile.sh"
+    script = "scripts/unzipFile.sh"
   }
 
   provisioner "file" {
@@ -109,6 +109,6 @@ build {
   }
 
   provisioner "shell" {
-    source = "scripts/systemd.sh"
+    script = "scripts/systemd.sh"
   }
 }
