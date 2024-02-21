@@ -5,7 +5,7 @@ sudo groupadd csye6225
 sudo adduser csye6225 -g csye6225 --shell /usr/sbin/nologin
 
 # change the owner of the deployed file to csye6255
-sudo chown csye6225:csye6255 webapp.jar
+sudo chown csye6225:csye6225 ./webapp/webapp.jar
 
 # allow csye6255 to read and execute the app
-sudo chmod 500 webapp.jar
+sudo chmod 500 ./webapp/webapp.jar
