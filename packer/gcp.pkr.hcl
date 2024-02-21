@@ -51,9 +51,9 @@ build {
   ]
 
   # update centos 8
-   provisioner "shell" {
-     script = "updateOs.sh"
-   }
+  provisioner "shell" {
+    script = "scripts/updateOs.sh"
+  }
 
   provisioner "shell" {
     script = "scripts/appDirSetup.sh"
@@ -69,37 +69,46 @@ build {
     script = "scripts/createLocalUser.sh"
   }
 
-     # install jdk 17
-     provisioner "shell" {
-       script = "scripts/installJDK.sh"
-     }
+  # install jdk 17
+  provisioner "shell" {
+    script = "scripts/installJDK.sh"
+  }
 
-   # install mysql
-   provisioner "shell" {
-     script = "installMysql.sh"
-   }
+  # install mysql
+  provisioner "shell" {
+    script = "scripts/installMysql.sh"
+  }
 
-   # setup mysql
-   provisioner "shell" {
-     script = "setUpMysql.sh"
-   }
+  # setup mysql
+  provisioner "shell" {
+    script = "scripts/setUpMysql.sh"
+  }
 
-   # install maven
-   provisioner "shell" {
-     script = "installMaven.sh"
-   }
+  # install maven
+  provisioner "shell" {
+    script = "scripts/installMaven.sh"
+  }
 
-   #install unzip
-   provisioner "shell" {
-     script = "installUnzip.sh"
-   }
+  #install unzip
+  provisioner "shell" {
+    script = "scripts/installUnzip.sh"
+  }
 
-   # set JAVA_HOME environment variable
-   provisioner "shell" {
-     script = "setUpJavaHomeVar.sh"
-   }
+  # set JAVA_HOME environment variable
+  provisioner "shell" {
+    script = "scripts/setUpJavaHomeVar.sh"
+  }
 
   provisioner "shell" {
     source = "scripts/unzipFile.sh"
+  }
+
+  provisioner "file" {
+    source      = "webapp.service"
+    destination = "/etc/systemd/system"
+  }
+
+  provisioner "shell" {
+    source = "scripts/systemd.sh"
   }
 }
