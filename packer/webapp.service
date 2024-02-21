@@ -5,7 +5,7 @@ After=syslog.target
 [Service]
 User=csye6225
 Group=csye6225
-ExecStart=/opt/webapp.jar
+ExecStart=/opt/webapp/webapp.jar
 SuccessExitStatus=143
 Restart=always
 RestartSec=5

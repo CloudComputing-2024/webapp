@@ -65,13 +65,20 @@ jobs:
         run: |
           mvn clean package
 
+      - name: Zip artifacts
+        run: |
+          zip -r webapp.zip ./target/*.jar
+
       - name: Create webapp directory placeholder
         run: mkdir -p packer/webapp
         working-directory: .
 
       - name: Prepare artifacts for Packer
         run: |
-          cp ./target/*.jar ./packer/webapp
+          mv webapp.zip ./packer/webapp
+#      - name: Prepare artifacts for Packer
+#        run: |
+#          cp ./target/*.jar ./packer/webapp
 
       - name: Build custom image with Packer
         run: |
