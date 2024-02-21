@@ -98,14 +98,14 @@ build {
     script = "scripts/unzipFile.sh"
   }
 
+  provisioner "file" {
+    source      = "webapp.service"
+    destination = "/etc/systemd/system/webapp.service"
+  }
+
   # create a local user
   provisioner "shell" {
     script = "scripts/createLocalUser.sh"
-  }
-
-  provisioner "file" {
-    source      = "webapp.service"
-    destination = "/opt/webapp.service"
   }
 
   provisioner "shell" {
