@@ -107,7 +107,7 @@ build {
   provisioner "shell" {
     script = "scripts/createLocalUser.sh"
   }
-
+  
   provisioner "shell" {
     script = "scripts/systemd.sh"
   }
