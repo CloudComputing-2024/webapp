@@ -98,10 +98,16 @@ build {
     script = "scripts/unzipFile.sh"
   }
 
-  provisioner "file" {
-    source      = "webapp.service"
-    destination = "/etc/systemd/system/webapp.service"
+#  provisioner "file" {
+#    source      = "webapp.service"
+#    destination = "/etc/systemd/system/webapp.service"
+#  }
+  provisioner "remote-exec" {
+    inline = [
+      "sudo cp webapp.service /etc/systemd/system/webapp.service"
+    ]
   }
+
 
   # create a local user
   provisioner "shell" {
