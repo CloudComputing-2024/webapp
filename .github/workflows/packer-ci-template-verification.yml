@@ -1,10 +1,9 @@
-name: Packer Continuous Integration
+name: Packer Template Status Check
 
 on: [pull_request]
 
 jobs:
   packer_checks:
-    name: Packer Template Verification
     runs-on: ubuntu-latest
 
     env:

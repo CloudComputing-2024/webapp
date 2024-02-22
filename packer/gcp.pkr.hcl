@@ -110,10 +110,11 @@ build {
 
   # create a local user
   provisioner "shell" {
-    script="scripts/createLocalUser.sh"
+    script = "scripts/createLocalUser.sh"
   }
 
   provisioner "shell" {
-    script="scripts/systemd.sh"
+    script = "scripts/systemd.sh"
   }
+  dwf
 }
