@@ -55,6 +55,7 @@ source "googlecompute" "csye6255-webapp-custom-image" {
   image_project_id        = var.project_id
   image_storage_locations = var.image_storage_locations
   ssh_username            = var.ssh_username
+  network                 = "projects/${var.project_id}/global/networks/default"
 }
 
 build {
