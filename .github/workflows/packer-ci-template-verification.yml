@@ -25,6 +25,10 @@ jobs:
         run: mkdir -p packer/webapp
         working-directory: .
 
+      - name: packer ini
+        run: packer init gcp.pkr.hcl
+        working-directory: ./packer
+
       - name: packer fmt
         run:  packer fmt -check gcp.pkr.hcl
         working-directory: ./packer
