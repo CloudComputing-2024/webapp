@@ -12,35 +12,35 @@ variable "project_id" {
 }
 
 variable "source_image_family" {
-  type    = string
+  type = string
 }
 
 variable "zone" {
-  type    = string
+  type = string
 }
 
 variable "disk_size" {
-  type    = number
+  type = number
 }
 
 variable "disk_type" {
-  type    = string
-}
-
-variable "image_name"{
   type = string
 }
 
-variable "image_family"{
+variable "image_name" {
+  type = string
+}
+
+variable "image_family" {
   type = string
 }
 
 
-variable "image_storage_locations"{
+variable "image_storage_locations" {
   type = list(string)
 }
 
-variable "ssh_username"{
+variable "ssh_username" {
   type = string
 }
 
