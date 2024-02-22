@@ -1,9 +1,9 @@
-name: pull-request-status-check
+name: Pull Request Status Check
 
 on: [pull_request]
 
 jobs:
-  pull-request-status-check:
+  pull_request_status_check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
