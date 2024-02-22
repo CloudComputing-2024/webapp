@@ -44,7 +44,7 @@ variable "ssh_username" {
   type = string
 }
 
-source "googlecompute" "csye6255-webapp-custom-image" {
+source "googlecompute" "dev-project-custom-image" {
   project_id              = var.project_id
   source_image_family     = var.source_image_family
   zone                    = var.zone
@@ -60,7 +60,7 @@ source "googlecompute" "csye6255-webapp-custom-image" {
 
 build {
   sources = [
-    "sources.googlecompute.csye6255-webapp-custom-image"
+    "sources.googlecompute.dev-project-custom-image"
   ]
 
   # update centos 8
@@ -68,10 +68,12 @@ build {
     script = "scripts/updateOs.sh"
   }
 
+  # set upd app directory
   provisioner "shell" {
     script = "scripts/appDirSetup.sh"
   }
 
+  # copy webapp folder to vm
   provisioner "file" {
     source      = "webapp/"
     destination = "/opt/webapp"
@@ -112,10 +114,17 @@ build {
     script = "scripts/setUpJavaHomeVar.sh"
   }
 
+  # install unzip
+  provisioner "shell" {
+    script = "scripts/installUnzip.sh"
+  }
+
+  # unzip file
   provisioner "shell" {
     script = "scripts/unzipFile.sh"
   }
 
+  # copy webapp service to vm
   provisioner "file" {
     source      = "webapp.service"
     destination = "/tmp/webapp.service"
@@ -126,6 +135,7 @@ build {
     script = "scripts/createLocalUser.sh"
   }
 
+  # use systemd to start service
   provisioner "shell" {
     script = "scripts/systemd.sh"
   }
