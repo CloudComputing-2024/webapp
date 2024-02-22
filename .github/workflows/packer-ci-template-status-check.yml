@@ -21,9 +21,9 @@ jobs:
         with:
           version: "latest"
 
-#      - name: Create webapp directory
-#        run: mkdir -p packer/webapp
-#        working-directory: .
+      - name: Create webapp directory
+        run: mkdir -p packer/webapp
+        working-directory: .
 
       - name: packer ini
         run: packer init gcp.pkr.hcl
