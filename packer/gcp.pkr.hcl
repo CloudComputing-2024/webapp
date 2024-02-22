@@ -37,7 +37,7 @@ source "googlecompute" "csye6255-webapp-custom-image" {
   zone                    = var.zone
   disk_size               = var.disk_size
   disk_type               = var.disk_type
-  image_name              = "csye6225-{{timestamp}}"
+  image_name              = "csye6225-custom-image-{{timestamp}}"
   image_description       = "CSYE6225 webapp Custom Image"
   image_family            = "csye6225-webapp-image"
   image_project_id        = var.project_id
@@ -112,7 +112,7 @@ build {
   provisioner "shell" {
     script = "scripts/createLocalUser.sh"
   }
-  
+
   provisioner "shell" {
     script = "scripts/systemd.sh"
   }
