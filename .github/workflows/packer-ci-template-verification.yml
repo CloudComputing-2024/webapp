@@ -31,7 +31,7 @@ jobs:
         working-directory: ./packer
 
       - name: packer fmt
-        run:  packer fmt gcp.pkr.hcl
+        run:  packer fmt -check gcp.pkr.hcl
         working-directory: ./packer
 
       - name: packer validate
