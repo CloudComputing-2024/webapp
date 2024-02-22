@@ -3,7 +3,7 @@ name: Packer Template Status Check
 on: [pull_request]
 
 jobs:
-  packer_checks:
+  packer_template_status_checks:
     runs-on: ubuntu-latest
 
     env:
@@ -24,10 +24,6 @@ jobs:
       - name: Create webapp directory
         run: mkdir -p packer/webapp
         working-directory: .
-
-      - name: packer ini
-        run: packer init gcp.pkr.hcl
-        working-directory: ./packer
 
       - name: packer fmt
         run:  packer fmt -check gcp.pkr.hcl
