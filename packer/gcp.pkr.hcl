@@ -114,6 +114,6 @@ build {
   }
 
   provisioner "shell" {
-    script="scripts/systemd.sh"
+    script = "scripts/systemd.sh"
   }
 }
