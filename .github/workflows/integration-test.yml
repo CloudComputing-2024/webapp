@@ -3,7 +3,7 @@ name: Integration Tests
 on: [pull_request]
 
 jobs:
-  integration-tests:
+  integration_tests:
     runs-on: ubuntu-latest
 
     env:

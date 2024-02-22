@@ -1,10 +1,9 @@
-name: Packer Continuous Integration
+name: Packer Template Status Check
 
 on: [pull_request]
 
 jobs:
-  packer_checks:
-    name: Packer Template Verification
+  packer_template_status_checks:
     runs-on: ubuntu-latest
 
     env:
@@ -31,7 +30,7 @@ jobs:
         working-directory: ./packer
 
       - name: packer fmt
-        run:  packer fmt gcp.pkr.hcl
+        run:  packer fmt -check gcp.pkr.hcl
         working-directory: ./packer
 
       - name: packer validate

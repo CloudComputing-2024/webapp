@@ -1,4 +1,4 @@
-name: Packer Custom Image Build
+name: Packer Build Custom Image
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  packer-build-custom-image:
+  packer_build_custom_image:
     runs-on: ubuntu-latest
 
     env:
