@@ -36,7 +36,7 @@ packer_cache/
 # Crash log
 crash.log
 
-*.pkrvars.hcl
+#*.pkrvars.hcl
 
 *.box
 

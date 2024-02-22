@@ -12,23 +12,36 @@ variable "project_id" {
 }
 
 variable "source_image_family" {
-  type    = string
-  default = "centos-stream-8"
+  type = string
 }
 
 variable "zone" {
-  type    = string
-  default = "us-west1-b"
+  type = string
 }
 
 variable "disk_size" {
-  type    = number
-  default = 20
+  type = number
 }
 
 variable "disk_type" {
-  type    = string
-  default = "pd-standard"
+  type = string
+}
+
+variable "image_name" {
+  type = string
+}
+
+variable "image_family" {
+  type = string
+}
+
+
+variable "image_storage_locations" {
+  type = list(string)
+}
+
+variable "ssh_username" {
+  type = string
 }
 
 source "googlecompute" "csye6255-webapp-custom-image" {
@@ -37,12 +50,11 @@ source "googlecompute" "csye6255-webapp-custom-image" {
   zone                    = var.zone
   disk_size               = var.disk_size
   disk_type               = var.disk_type
-  image_name              = "csye6225-custom-image-{{timestamp}}"
-  image_description       = "CSYE6225 webapp Custom Image"
-  image_family            = "csye6225-webapp-image"
+  image_name              = var.image_name
+  image_family            = var.image_family
   image_project_id        = var.project_id
-  image_storage_locations = ["us"]
-  ssh_username            = "packer"
+  image_storage_locations = var.image_storage_locations
+  ssh_username            = var.ssh_username
 }
 
 build {

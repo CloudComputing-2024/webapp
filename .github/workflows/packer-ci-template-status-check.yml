@@ -34,5 +34,5 @@ jobs:
         working-directory: ./packer
 
       - name: packer validate
-        run: packer validate -var 'project_id="csye6225-414206"' gcp.pkr.hcl
+        run:  packer validate -var-file=variables.pkrvars.hcl gcp.pkr.hcl
         working-directory: ./packer
