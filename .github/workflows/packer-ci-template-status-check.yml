@@ -1,9 +1,9 @@
-name: Packer Template Status Check
+name: Packer CI Template Status Check
 
 on: [pull_request]
 
 jobs:
-  packer_template_status_checks:
+  packer-ci-template-status-checks:
     runs-on: ubuntu-latest
 
     env:
