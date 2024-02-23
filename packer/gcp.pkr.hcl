@@ -68,14 +68,14 @@ build {
     script = "scripts/updateOs.sh"
   }
 
-  # create a local user
-  provisioner "shell" {
-    script = "scripts/createLocalUser.sh"
-  }
-
   # set upd app directory
   provisioner "shell" {
     script = "scripts/appDirSetup.sh"
+  }
+
+  # create a local user
+  provisioner "shell" {
+    script = "scripts/createLocalUser.sh"
   }
 
   # copy webapp folder to vm

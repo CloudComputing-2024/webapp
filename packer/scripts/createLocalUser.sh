@@ -10,6 +10,8 @@ sudo adduser csye6225 -g csye6225 --shell /usr/sbin/nologin
 #sudo chown csye6225:csye6225 /opt/webapp/webapp.jar
 sudo chown -R csye6255:csye6255 /opt/webapp
 
+
 # allow csye6255 to read and execute the app
+
 #sudo chmod 500 /opt/webapp/webapp.jar
 sudo chmod -R 500 /opt/webapp
