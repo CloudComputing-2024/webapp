@@ -68,6 +68,11 @@ build {
     script = "scripts/updateOs.sh"
   }
 
+  # create a local user
+  provisioner "shell" {
+    script = "scripts/createLocalUser.sh"
+  }
+
   # set upd app directory
   provisioner "shell" {
     script = "scripts/appDirSetup.sh"
@@ -125,10 +130,6 @@ build {
     destination = "/tmp/webapp.service"
   }
 
-  # create a local user
-  provisioner "shell" {
-    script = "scripts/createLocalUser.sh"
-  }
 
   # use systemd to start service
   provisioner "shell" {
