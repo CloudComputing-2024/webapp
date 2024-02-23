@@ -99,11 +99,6 @@ build {
     script = "scripts/installMaven.sh"
   }
 
-  #install unzip
-  provisioner "shell" {
-    script = "scripts/installUnzip.sh"
-  }
-
   # set JAVA_HOME environment variable
   provisioner "shell" {
     script = "scripts/createJavaHomeVar.sh"
