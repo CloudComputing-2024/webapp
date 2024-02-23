@@ -73,11 +73,6 @@ build {
     script = "scripts/appDirSetup.sh"
   }
 
-  # create a local user
-  provisioner "shell" {
-    script = "scripts/createLocalUser.sh"
-  }
-
   # copy webapp folder to vm
   provisioner "file" {
     source      = "webapp/"
@@ -130,6 +125,10 @@ build {
     destination = "/tmp/webapp.service"
   }
 
+  # create a local user
+  provisioner "shell" {
+    script = "scripts/createLocalUser.sh"
+  }
 
   # use systemd to start service
   provisioner "shell" {
