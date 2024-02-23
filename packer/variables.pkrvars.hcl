@@ -6,6 +6,6 @@ disk_type               = "pd-balanced"
 image_name              = "dev-project-custom-image-{{timestamp}}"
 image_family            = "dev-project-custom-image"
 image_storage_locations = ["us"]
-ssh_username            = "csye6225"
+ssh_username            = "packer"
 
 
