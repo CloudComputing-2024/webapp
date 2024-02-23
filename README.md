@@ -62,3 +62,26 @@ user information access.
 - **Configure Security**: set up security groups in AWS to only allow traffic on necessary ports(like 8080)
 - **Test endpoints in Postman**
 
+### Build Custom Application Images with Packer
+- **Base Image**: Centos Stream 8
+- **Project and Network Configuration**: default VPC
+- **Application Dependencies**: `Java SDK 17` `MySQL 8.0.31` `Maven` `Unzip`
+- **Create Local User**: A nologin user `csye6225` was created
+
+### GitHub Actions for Continuous Integration
+#### Workflow for Status Check
+- Runs `packer fmt` to check the format of the Packer template**
+- Runs `packer validate` to validate the Packer template
+
+#### Workflow to Build Custom Images ####
+- Created a new IAM service account in the DEV GCP project for GitHub Actions, configuring security credentials appropriately.
+- Assigned necessary roles to the service account following GCP documentation and installed & configured the gcloud CLI on GitHub Actions runner.
+- On pull request merge:
+  - Conducted integration testing.
+  - Run  `mvn clean package` to build application artifacts on the GitHub Actions runner.
+  - Built the custom image, creating a csye6225 user, installing dependencies, copying artifacts and configuration files, and ensuring ownership by csye6225.
+  - User systemd to add and enable a systemd service file for my application to start on instance launch.
+
+### Infrastructure as Code with Terraform ###
+- **Firewall**:Setting up firewall rules to allow traffic to the application's port `8080` while blocking SSH access from the internet.
+- **Compute Engine Instance**: Use custom image to build an instance, with balanced boot disk type and 100G size.
