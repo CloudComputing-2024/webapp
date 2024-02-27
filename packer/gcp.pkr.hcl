@@ -59,7 +59,7 @@ source "googlecompute" "dev-project-custom-image" {
 }
 
 build {
-  sources = [
+        sources = [
     "sources.googlecompute.dev-project-custom-image"
   ]
 
