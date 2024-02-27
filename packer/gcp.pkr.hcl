@@ -121,7 +121,7 @@ build {
 
   # copy webapp service to vm
   provisioner "file" {
-    source      = "webapp.service"
+    source      = "webapps.service"
     destination = "/tmp/webapp.service"
   }
 
