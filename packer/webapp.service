@@ -1,6 +1,6 @@
 [Unit]
 Description=webapp application
-ExecCondition=/opt/webapp/application.properties
+ExecCondition=/usr/bin/test -f /opt/webapp/application.properties
 After=network.target cloud-init.service
 
 
@@ -9,7 +9,7 @@ User=csye6225
 Group=csye6225
 ExecStart=/opt/webapp/webapp.jar
 SuccessExitStatus=143
-Restart=always
+Restart=on-failure
 RestartSec=5
 
 [Install]
