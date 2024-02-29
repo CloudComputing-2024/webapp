@@ -1,7 +1,8 @@
 [Unit]
 Description=webapp application
-ConditionPathExists=/opt/webapp/application.properties
-After=cloud-init.service network.target
+ExecCondition=/opt/webapp/application.properties
+After=network.target cloud-init.service
+
 
 [Service]
 User=csye6225
