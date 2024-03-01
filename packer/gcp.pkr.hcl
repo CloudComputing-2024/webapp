@@ -84,16 +84,6 @@ build {
     script = "scripts/installJDK.sh"
   }
 
-  #  # install mysql
-  #  provisioner "shell" {
-  #    script = "scripts/installMysql.sh"
-  #  }
-  #
-  #  # setup mysql
-  #  provisioner "shell" {
-  #    script = "scripts/setUpMysql.sh"
-  #  }
-
   # install maven
   provisioner "shell" {
     script = "scripts/installMaven.sh"
