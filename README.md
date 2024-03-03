@@ -1,4 +1,3 @@
-test
 # Webapp
 
 ## Introduction
@@ -66,7 +65,7 @@ user information access.
 ### Build Custom Application Images with Packer
 - **Base Image**: Centos Stream 8
 - **Project and Network Configuration**: default VPC
-- **Application Dependencies**: `Java SDK 17` `MySQL 8.0.31` `Maven` `Unzip`
+- **Application Dependencies**: `Java SDK 17` `GCP CloudSQL - MySQL 8.0.31` `Maven` `Unzip`
 - **Create Local User**: A nologin user `csye6225` was created
 
 ### GitHub Actions for Continuous Integration
