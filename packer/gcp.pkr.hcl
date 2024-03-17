@@ -51,9 +51,9 @@ build {
   ]
 
   # update centos 8
-  provisioner "shell" {
-    script = "scripts/updateOs.sh"
-  }
+#  provisioner "shell" {
+#    script = "scripts/updateOs.sh"
+#  }
 
   provisioner "shell" {
     script = "scripts/appDirSetup.sh"
@@ -63,56 +63,56 @@ build {
     source      = "webapp/"
     destination = "/opt/webapp"
   }
-
-  # install jdk 17
-  provisioner "shell" {
-    script = "scripts/installJDK.sh"
-  }
-
-  # install mysql
-  provisioner "shell" {
-    script = "scripts/installMysql.sh"
-  }
-
-  # setup mysql
-  provisioner "shell" {
-    script = "scripts/setUpMysql.sh"
-  }
-
-  # install maven
-  provisioner "shell" {
-    script = "scripts/installMaven.sh"
-  }
-
-  #install unzip
-  provisioner "shell" {
-    script = "scripts/installUnzip.sh"
-  }
-
-  # set JAVA_HOME environment variable
-  provisioner "shell" {
-    script = "scripts/createJavaHomeVar.sh"
-  }
-
-  provisioner "shell" {
-    script = "scripts/setUpJavaHomeVar.sh"
-  }
-
-  provisioner "shell" {
-    script = "scripts/unzipFile.sh"
-  }
-
-  # create a local user
-  provisioner "shell" {
-    script = "scripts/createLocalUser.sh"
-  }
-
-  provisioner "file" {
-    source      = "webapp.service"
-    destination = "/etc/systemd/system"
-  }
-
-  provisioner "shell" {
-    script = "scripts/systemd.sh"
-  }
+#
+#  # install jdk 17
+#  provisioner "shell" {
+#    script = "scripts/installJDK.sh"
+#  }
+#
+#  # install mysql
+#  provisioner "shell" {
+#    script = "scripts/installMysql.sh"
+#  }
+#
+#  # setup mysql
+#  provisioner "shell" {
+#    script = "scripts/setUpMysql.sh"
+#  }
+#
+#  # install maven
+#  provisioner "shell" {
+#    script = "scripts/installMaven.sh"
+#  }
+#
+#  #install unzip
+#  provisioner "shell" {
+#    script = "scripts/installUnzip.sh"
+#  }
+#
+#  # set JAVA_HOME environment variable
+#  provisioner "shell" {
+#    script = "scripts/createJavaHomeVar.sh"
+#  }
+#
+#  provisioner "shell" {
+#    script = "scripts/setUpJavaHomeVar.sh"
+#  }
+#
+#  provisioner "shell" {
+#    script = "scripts/unzipFile.sh"
+#  }
+#
+#  # create a local user
+#  provisioner "shell" {
+#    script = "scripts/createLocalUser.sh"
+#  }
+#
+#  provisioner "file" {
+#    source      = "webapp.service"
+#    destination = "/etc/systemd/system"
+#  }
+#
+#  provisioner "shell" {
+#    script = "scripts/systemd.sh"
+#  }
 }
