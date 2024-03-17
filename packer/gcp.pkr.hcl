@@ -68,60 +68,60 @@ build {
     script = "scripts/updateOs.sh"
   }
 
-  # set upd app directory
-  provisioner "shell" {
-    script = "scripts/appDirSetup.sh"
-  }
-
-  # copy webapp folder to vm
-  provisioner "file" {
-    source      = "webapp/"
-    destination = "/opt/webapp"
-  }
-
-  # install jdk 17
-  provisioner "shell" {
-    script = "scripts/installJDK.sh"
-  }
-
-  # install maven
-  provisioner "shell" {
-    script = "scripts/installMaven.sh"
-  }
-
-  # set JAVA_HOME environment variable
-  provisioner "shell" {
-    script = "scripts/createJavaHomeVar.sh"
-  }
-
-  # set JAVA_HOME environment variable
-  provisioner "shell" {
-    script = "scripts/setUpJavaHomeVar.sh"
-  }
-
-  # install unzip
-  provisioner "shell" {
-    script = "scripts/installUnzip.sh"
-  }
-
-  # unzip file
-  provisioner "shell" {
-    script = "scripts/unzipFile.sh"
-  }
-
-  # copy webapp service to vm
-  provisioner "file" {
-    source      = "webapp.service"
-    destination = "/tmp/webapp.service"
-  }
-
-  # create a local user
-  provisioner "shell" {
-    script = "scripts/createLocalUser.sh"
-  }
-
-  # use systemd to start service
-  provisioner "shell" {
-    script = "scripts/systemd.sh"
-  }
+#  # set upd app directory
+#  provisioner "shell" {
+#    script = "scripts/appDirSetup.sh"
+#  }
+#
+#  # copy webapp folder to vm
+#  provisioner "file" {
+#    source      = "webapp/"
+#    destination = "/opt/webapp"
+#  }
+#
+#  # install jdk 17
+#  provisioner "shell" {
+#    script = "scripts/installJDK.sh"
+#  }
+#
+#  # install maven
+#  provisioner "shell" {
+#    script = "scripts/installMaven.sh"
+#  }
+#
+#  # set JAVA_HOME environment variable
+#  provisioner "shell" {
+#    script = "scripts/createJavaHomeVar.sh"
+#  }
+#
+#  # set JAVA_HOME environment variable
+#  provisioner "shell" {
+#    script = "scripts/setUpJavaHomeVar.sh"
+#  }
+#
+#  # install unzip
+#  provisioner "shell" {
+#    script = "scripts/installUnzip.sh"
+#  }
+#
+#  # unzip file
+#  provisioner "shell" {
+#    script = "scripts/unzipFile.sh"
+#  }
+#
+#  # copy webapp service to vm
+#  provisioner "file" {
+#    source      = "webapp.service"
+#    destination = "/tmp/webapp.service"
+#  }
+#
+#  # create a local user
+#  provisioner "shell" {
+#    script = "scripts/createLocalUser.sh"
+#  }
+#
+#  # use systemd to start service
+#  provisioner "shell" {
+#    script = "scripts/systemd.sh"
+#  }
 }
