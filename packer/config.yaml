@@ -3,7 +3,7 @@ logging:
     my-app-receiver:
       type: files
       include_paths:
-        - /tmp/myapp.log
+        - /tmp/webapp.log
       record_log_file_path: true
   processors:
     my-app-processor:
@@ -13,7 +13,7 @@ logging:
       severity_key: level
       severity_mapping:
         error: ERROR
-        warn: WARNING
+        warn: WARN
         info: INFO
         debug: DEBUG
         trace: TRACE
