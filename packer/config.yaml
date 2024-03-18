@@ -10,15 +10,13 @@ logging:
       type: parse_json
       time_key: time
       time_format: "yyyy-MM-dd' 'HH:mm:ss.SSS"
-      severity_key: level
-      severity_mapping:
-        error: ERROR
-        warn: WARN
-        info: INFO
-        debug: DEBUG
-        trace: TRACE
+    move_severity:
+      type: modify_fields
+      fields:
+        severity:
+          move_from: jsonPayload.severity
   service:
     pipelines:
       default_pipeline:
         receivers: [my-app-receiver]
-        processors: [my-app-processor]
+        processors: [my-app-processor, move_severity]

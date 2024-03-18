@@ -1,19 +1,22 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <configuration>
-    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+    <appender name="LogFile" class="ch.qos.logback.core.FileAppender">
+        <file>/tmp/webapp.log</file>
         <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
             <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
-                <jsonFormatter
-                        class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter">
+                <jsonFormatter class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter">
                     <prettyPrint>true</prettyPrint>
                 </jsonFormatter>
                 <timestampFormat>yyyy-MM-dd' 'HH:mm:ss.SSS</timestampFormat>
-                <appendLineSeparator>false</appendLineSeparator>
+                <appendLineSeparator>true</appendLineSeparator>
+                <fieldNames>
+                    <levelFieldName>severity</levelFieldName>
+                </fieldNames>
             </layout>
         </encoder>
     </appender>
 
-    <root level="info">
-        <appender-ref ref="Console" />
+    <root level="trace">
+        <appender-ref ref="LogFile" />
     </root>
 </configuration>
