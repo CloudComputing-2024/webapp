@@ -114,10 +114,10 @@ build {
     script = "scripts/installGoogleOpsAgent.sh"
   }
 
-  # configure google ops agent
+  # copy config file to tmp
   provisioner "file" {
     source      = "config.yaml"
-    destination = "/etc/google-cloud-ops-agent/config.yaml"
+    destination = "/tmp/config.yaml"
   }
 
   # copy webapp service to vm
@@ -131,9 +131,9 @@ build {
     script = "scripts/createLocalUser.sh"
   }
 
-  # set config file permission
+  # move config file and set permission
   provisioner "shell" {
-    script = "scripts/setConfigPermission.sh"
+    script = "moveOpsAgentConfigFile.sh"
   }
 
   # use systemd to start service
