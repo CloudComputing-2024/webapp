@@ -1,4 +1,3 @@
 set -e
 
-#sudo dnf update -y
-sudo yum update -y
+sudo dnf update -y
