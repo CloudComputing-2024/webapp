@@ -114,11 +114,6 @@ build {
     script = "scripts/installGoogleOpsAgent.sh"
   }
 
-  # set config file permission
-  provisioner "shell" {
-    script = "scripts/setConfigPermission.sh"
-  }
-
   # configure google ops agent
   provisioner "file" {
     source      = "config.yaml"
@@ -134,6 +129,11 @@ build {
   # create a local user
   provisioner "shell" {
     script = "scripts/createLocalUser.sh"
+  }
+
+  # set config file permission
+  provisioner "shell" {
+    script = "scripts/setConfigPermission.sh"
   }
 
   # use systemd to start service
