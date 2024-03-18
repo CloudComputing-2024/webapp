@@ -68,7 +68,7 @@ build {
     script = "scripts/updateOs.sh"
   }
 
-  # set upd app directory
+  # set up app directory
   provisioner "shell" {
     script = "scripts/appDirSetup.sh"
   }
@@ -114,15 +114,15 @@ build {
     script = "scripts/installGoogleOpsAgent.sh"
   }
 
+  # set config file permission
+  provisioner "shell" {
+    script = "scripts/setConfigPermission.sh"
+  }
+
   # configure google ops agent
   provisioner "file" {
     source      = "config.yaml"
     destination = "/etc/google-cloud-ops-agent/config.yaml"
-  }
-
-  # set config file permission
-  provisioner "shell" {
-    script = "scripts/setConfigPermission.sh"
   }
 
   # copy webapp service to vm
