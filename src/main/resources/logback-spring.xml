@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <appender name="LogFile" type="File" fileName="/tmp/webapp.log">
+    <appender name="LogFile" class="ch.qos.logback.core.FileAppender">
+        <file>/tmp/webapp.log</file>
         <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
             <providers>
                 <pattern>
@@ -14,6 +15,9 @@
                         }
                     </pattern>
                 </pattern>
+                <fieldNames>
+                    <levelFieldName>severity</levelFieldName>
+                </fieldNames>
             </providers>
         </encoder>
     </appender>
