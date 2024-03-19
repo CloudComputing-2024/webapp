@@ -3,6 +3,7 @@
     <appender name="LogFile" class="ch.qos.logback.core.FileAppender">
         <file>/tmp/webapp.log</file>
         <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <prettyPrint>true</prettyPrint>
             <providers>
                 <pattern>
                     <pattern>

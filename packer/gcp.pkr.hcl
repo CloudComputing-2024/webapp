@@ -132,9 +132,9 @@ build {
   }
 
   # move config file and set permission
-  #  provisioner "shell" {
-  #    script = "scripts/moveOpsAgentConfigFile.sh"
-  #  }
+  provisioner "shell" {
+    script = "scripts/moveOpsAgentConfigFile.sh"
+  }
 
   # use systemd to start service
   provisioner "shell" {
