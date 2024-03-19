@@ -1,22 +1,28 @@
 logging:
   receivers:
-    my-app-receiver:
+    custom_file1:
       type: files
       include_paths:
         - /tmp/webapp.log
-      record_log_file_path: true
   processors:
-    my-app-processor:
-      type: parse_json
+    parse_java_multiline:
+      type: parse_multiline
+      match_any:
+        - type: language_exceptions
+          language: java
+    extract_structure:
+      type: parse_regex
+      field: message
+      regex: "^(?<time>[\d-]*T[\d:.Z]*) (?<severity>[^ ]*) (?<file>[^ :]*):(?<line>[\d]*) - (?<message>(.|\\n)*)$"
       time_key: time
-      time_format: "yyyy-MM-dd' 'HH:mm:ss.SSS"
+      time_format: "%Y-%m-%dT%H:%M:%S.%L"
     move_severity:
       type: modify_fields
       fields:
         severity:
-          move_from: jsonPayload.level
+          move_from: jsonPayload.severity
   service:
     pipelines:
-      default_pipeline:
-        receivers: [my-app-receiver]
-        processors: [my-app-processor, move_severity]
+      pipeline1:
+        receivers: [custom_file1]
+        processors: [parse_java_multiline, extract_structure, move_severity]

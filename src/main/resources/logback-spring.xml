@@ -1,22 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <appender name="LogFile" class="ch.qos.logback.core.FileAppender">
-        <file>/tmp/webapp.log</file>
-        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
-            <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
-                <jsonFormatter class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter">
-                    <prettyPrint>true</prettyPrint>
-                </jsonFormatter>
-                <timestampFormat>yyyy-MM-dd' 'HH:mm:ss.SSS</timestampFormat>
-                <appendLineSeparator>true</appendLineSeparator>
-                <fieldNames>
-                    <levelFieldName>severity</levelFieldName>
-                </fieldNames>
-            </layout>
+    <appender name="LogFile" type="File" fileName="/tmp/webapp.log">
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <pattern>
+                    <pattern>
+                        {
+                        "time": "%date{yyyy-MM-dd'T'HH:mm:ss.SSSSSSXXX}",
+                        "severity": "%level",
+                        "file": "%file",
+                        "line": "%line",
+                        "message": "%message"
+                        }
+                    </pattern>
+                </pattern>
+            </providers>
         </encoder>
     </appender>
 
-    <root level="trace">
-        <appender-ref ref="LogFile" />
+    <root level="TRACE">
+        <appender-ref ref="LogFile"/>
     </root>
 </configuration>
