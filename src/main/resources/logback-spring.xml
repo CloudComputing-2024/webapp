@@ -8,12 +8,12 @@
                 <pattern>
                     <pattern>
                         {
-                        "time": "%date{yyyy-MM-dd'T'HH:mm:ss.SSSSSSXXX}",
+                        "time": "%date{%Y-%m-%dT%H:%M:%S.%L%Z}",
                         "severity": "%level",
                         "file": "%file",
                         "line": "%line",
                         "message": "%message"
-                        }
+                        }%n
                     </pattern>
                 </pattern>
                 <fieldNames>
@@ -23,7 +23,7 @@
         </encoder>
     </appender>
 
-    <root level="TRACE">
+    <root level="INFO">
         <appender-ref ref="LogFile"/>
     </root>
 </configuration>

@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Objects;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 @RestController
@@ -63,6 +63,10 @@ public class UserRestController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         UserEntity user = userRepository.findByUsername(authentication.getName())
                                         .orElseThrow(() -> new UsernameNotFoundException("Username is not found"));
+        // Log the user information
+        Logger logger = Logger.getLogger(this.getClass().getName());
+        logger.info("User logged in: " + user.toString());
+
         String json = objectMapper.writeValueAsString(user);
         return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(json);
     }
@@ -88,7 +92,6 @@ public class UserRestController {
 
         // Cannot update username
         if (!updatedUser.getUsername().equals(authentication.getName())) {
-            System.out.println("updatedUser: " + updatedUser.getUsername() + "authentication: " + authentication.getName());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -104,6 +107,10 @@ public class UserRestController {
         if (updatedUser.getAccountUpdated() != null || updatedUser.getAccountCreated() != null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
+        // Log the user information
+        Logger logger = Logger.getLogger(this.getClass().getName());
+        logger.info("User updated in: " + user.toString());
 
         // save user in userRepository
         userRepository.save(user);
@@ -153,6 +160,9 @@ public class UserRestController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
 
+        // Log the user information
+        Logger logger = Logger.getLogger(this.getClass().getName());
+        logger.info("User created in: " + newUser.toString());
 
         // return HttpStatus.CREATED status and user information
         String json = objectMapper.writeValueAsString(newUser);
