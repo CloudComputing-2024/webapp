@@ -65,6 +65,7 @@ public class UserRestController {
                                         .orElseThrow(() -> new UsernameNotFoundException("Username is not found"));
         // Log the user information
         Logger logger = Logger.getLogger(this.getClass().getName());
+        logger.info("Http 200 OK - User logged in successfully");
         logger.info("User logged in: " + user.toString());
 
         String json = objectMapper.writeValueAsString(user);
@@ -73,6 +74,9 @@ public class UserRestController {
 
     @PutMapping("/v1/user/self")
     public ResponseEntity<String> update(Authentication authentication, @RequestBody JsonNode requestBody) {
+        // Log the user information
+        Logger logger = Logger.getLogger(this.getClass().getName());
+
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
 
         // declare a UserEntity object
@@ -82,8 +86,10 @@ public class UserRestController {
             // convert JasonNode to UserEntity and check for extra invalid fields
             updatedUser = objectMapper.treeToValue(requestBody, UserEntity.class);
         } catch (UnrecognizedPropertyException exception) {
+            logger.warning("Http 400 Bad request - Unrecognized property in request body");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (Exception exception) {
+            logger.severe("Error converting request body to UserEntity");
             throw new IllegalArgumentException();
         }
 
@@ -92,6 +98,7 @@ public class UserRestController {
 
         // Cannot update username
         if (!updatedUser.getUsername().equals(authentication.getName())) {
+            logger.warning("Http 400  Bad request -Cannot update username");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -105,11 +112,11 @@ public class UserRestController {
 
         // check fields that are not allowed to be updated like account_created and account_updated
         if (updatedUser.getAccountUpdated() != null || updatedUser.getAccountCreated() != null) {
+            logger.warning("Http 400  Bad request -Cannot update account_created and account_updated field");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        // Log the user information
-        Logger logger = Logger.getLogger(this.getClass().getName());
+        logger.info("Http 204 No Content - User Updated Successfully");
         logger.info("User updated in: " + user.toString());
 
         // save user in userRepository
@@ -119,6 +126,8 @@ public class UserRestController {
 
     @PostMapping("/v1/user")
     public ResponseEntity<String> register(@RequestBody JsonNode requestBody) throws JsonProcessingException {
+        // Log the user information
+        Logger logger = Logger.getLogger(this.getClass().getName());
 
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
 
@@ -129,18 +138,22 @@ public class UserRestController {
             // convert JasonNode to UserEntity and check for extra invalid fields
             theUser = objectMapper.treeToValue(requestBody, UserEntity.class);
         } catch (UnrecognizedPropertyException exception) {
+            logger.warning("Http 400 Bad request - Unrecognized property in request body");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (Exception exception) {
+            logger.severe("Error converting request body to UserEntity");
             throw new IllegalArgumentException();
         }
 
         // verify if the username is a email format
         if (!emailPattern.matcher(theUser.getUsername()).find()) {
+            logger.warning("Http 400  Bad request - Invalid username format");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         // check if username already exists in database, not allow duplicate accounts, return bad request
         if (userRepository.existsByUsername(theUser.getUsername())) {
+            logger.warning("Http 400 Bad request - Username already exists");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -160,8 +173,8 @@ public class UserRestController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
 
-        // Log the user information
-        Logger logger = Logger.getLogger(this.getClass().getName());
+
+        logger.info("Http 201 - User Created Successfully");
         logger.info("User created in: " + newUser.toString());
 
         // return HttpStatus.CREATED status and user information

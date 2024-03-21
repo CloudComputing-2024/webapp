@@ -120,6 +120,11 @@ build {
     destination = "/tmp/config.yaml"
   }
 
+  # move config file and set permission
+  provisioner "shell" {
+    script = "scripts/moveOpsAgentConfigFile.sh"
+  }
+
   # copy webapp service to vm
   provisioner "file" {
     source      = "webapp.service"
@@ -129,11 +134,6 @@ build {
   # create a local user
   provisioner "shell" {
     script = "scripts/createLocalUser.sh"
-  }
-
-  # move config file and set permission
-  provisioner "shell" {
-    script = "scripts/moveOpsAgentConfigFile.sh"
   }
 
   # use systemd to start service
