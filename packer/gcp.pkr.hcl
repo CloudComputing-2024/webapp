@@ -68,6 +68,22 @@ build {
     script = "scripts/updateOs.sh"
   }
 
+  # install google ops agent
+  provisioner "shell" {
+    script = "scripts/installGoogleOpsAgent.sh"
+  }
+
+  # copy config file to tmp
+  provisioner "file" {
+    source      = "config.yaml"
+    destination = "/tmp/config.yaml"
+  }
+
+  # move config file and set permission
+  provisioner "shell" {
+    script = "scripts/moveOpsAgentConfigFile.sh"
+  }
+
   # set up app directory
   provisioner "shell" {
     script = "scripts/appDirSetup.sh"
@@ -109,17 +125,6 @@ build {
     script = "scripts/unzipFile.sh"
   }
 
-  # install google ops agent
-  provisioner "shell" {
-    script = "scripts/installGoogleOpsAgent.sh"
-  }
-
-  # copy config file to tmp
-  provisioner "file" {
-    source      = "config.yaml"
-    destination = "/tmp/config.yaml"
-  }
-
   # copy webapp service to vm
   provisioner "file" {
     source      = "webapp.service"
@@ -131,9 +136,9 @@ build {
     script = "scripts/createLocalUser.sh"
   }
 
-  # move config file and set permission
+  # create log file path and give user permission
   provisioner "shell" {
-    script = "scripts/moveOpsAgentConfigFile.sh"
+    script = "scripts/createLogDirectory.sh"
   }
 
   # use systemd to start service
