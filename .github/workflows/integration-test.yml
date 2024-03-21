@@ -40,6 +40,11 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
+      - name: Create Log Directory
+        run: |
+          sudo mkdir -p /var/log/webapp
+          sudo chmod 777 /var/log/webapp
+
       - name: Test with Maven
 
         run: mvn -B package --file pom.xml
