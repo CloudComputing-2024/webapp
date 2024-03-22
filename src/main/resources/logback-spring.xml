@@ -8,7 +8,7 @@
                 <pattern>
                     <pattern>
                         {
-                        "time": "%date{%Y-%m-%dT%H:%M:%S.%L%Z}",
+                        "time": "%date{%Y-%m-%d %H:%M:%S.%L}",
                         "severity": "%level",
                         "file": "%file",
                         "line": "%line",
