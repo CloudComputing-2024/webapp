@@ -6,6 +6,9 @@ logging:
         - /var/log/webapp/webapp.log
       record_log_file_path: true
   processors:
+    urldecode:
+      type: urldecode
+      field: message
     my-app-processor:
       type: parse_json
       time_key: time
@@ -19,4 +22,4 @@ logging:
     pipelines:
       default_pipeline:
         receivers: [my-app-receiver]
-        processors: [my-app-processor, move_severity]
+        processors: [urldecode, my-app-processor, move_severity]
