@@ -33,9 +33,6 @@ jobs:
           distribution: 'oracle'
           cache: maven
 
-      - name: Clean Maven Local Repository
-        run: rm -rf ~/.m2/repository
-
       - name: Create Log Directory
         run: |
           sudo mkdir -p /var/log/webapp
@@ -43,6 +40,12 @@ jobs:
 
       - name: Validate and Reload pom.xml
         run: mvn validate
+
+      - name: Resolve Dependencies
+        run: mvn dependency:resolve
+
+      - name: Clean Project
+        run: mvn clean
 
       - name: Test with Maven
         run: mvn test -Dtest=UserRestControllerIntegrationTests
