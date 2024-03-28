@@ -46,5 +46,4 @@ jobs:
           sudo chmod 777 /var/log/webapp
 
       - name: Test with Maven
-
-        run: mvn -B package --file pom.xml
+        run: mvn test -Dtest=UserRestControllerIntegrationTests
