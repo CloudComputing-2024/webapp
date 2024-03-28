@@ -3,6 +3,8 @@ package com.neu.webapp.service;
 import com.neu.webapp.entity.Role;
 import com.neu.webapp.entity.UserEntity;
 import com.neu.webapp.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -43,5 +45,9 @@ public class CustomUserDetailsService implements UserDetailsService {
     // Convert role entities to a collection of GrantedAuthority
     private Collection<GrantedAuthority> mapRolesToAuthorities(List<Role> roles) {
         return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+    }
+
+    public UserEntity findByVerificationToken(String token){
+        return userRepository.findByVerificationToken(token);
     }
 }
