@@ -13,4 +13,5 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     // check if this user exists
     Boolean existsByUsername(String username);
+    UserEntity findByVerificationToken(String token);
 }

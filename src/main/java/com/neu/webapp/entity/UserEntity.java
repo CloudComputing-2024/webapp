@@ -12,6 +12,7 @@ import lombok.experimental.Accessors;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -53,6 +54,18 @@ public class UserEntity {
     @JsonProperty("account_updated")
     @Column(name = "account_updated")
     private ZonedDateTime accountUpdated;
+
+    @JsonProperty("verification_token")
+    @Column(name = "verification_token")
+    private String verificationToken;
+
+    @JsonProperty("verification_token_expiration")
+    @Column (name = "verification_token_expiration")
+    private Date verificationTokenExpiration;
+
+    @JsonProperty("verification_status")
+    @Column(name = "verification_status")
+    private String verificationStatus;
 
     // Define a many-to-many relationship between users and roles
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -109,6 +122,9 @@ public class UserEntity {
                 ", username='" + username + '\'' +
                 ", account_created=" + accountCreated +
                 ", account_updated=" + accountUpdated +
+                ", verification_token=" + verificationToken +
+                ", verification_status=" + verificationStatus +
+                ", verificationToken_expiration=" + verificationTokenExpiration +
                 '}';
     }
 }
