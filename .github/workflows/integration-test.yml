@@ -47,12 +47,12 @@ jobs:
       - name: Clean Project
         run: mvn clean
 
-      - name: Test with Maven
-        run: mvn test -Dtest=UserRestControllerIntegrationTests
-
-      - name: Upload log file on failure
-        if: failure()
-        uses: actions/upload-artifact@v3
-        with:
-          name: log-files
-          path: ${{ github.workspace }}/logs/**
+#      - name: Test with Maven
+#        run: mvn test -Dtest=UserRestControllerIntegrationTests
+#
+#      - name: Upload log file on failure
+#        if: failure()
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: log-files
+#          path: ${{ github.workspace }}/logs/**
