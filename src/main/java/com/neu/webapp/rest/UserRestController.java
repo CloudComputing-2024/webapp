@@ -187,7 +187,7 @@ public class UserRestController {
         Role userRole = new Role("USER");
         newUser.setRoles(new ArrayList<>(Collections.singletonList(userRole)));
 
-        if(theUser.getVerificationStatus().equals("verified")){
+        if(theUser.getVerificationStatus() != null && theUser.getVerificationStatus().equals("verified")){
             newUser.setVerificationStatus("verified");
         }
 
