@@ -1,11 +1,15 @@
 package com.neu.webapp.rest;
 
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.google.cloud.pubsub.v1.Publisher;
+import com.google.protobuf.ByteString;
+import com.google.pubsub.v1.ProjectTopicName;
+import com.google.pubsub.v1.PubsubMessage;
 import com.neu.webapp.entity.Role;
 import com.neu.webapp.entity.UserEntity;
 import com.neu.webapp.repository.RoleRepository;
@@ -22,8 +26,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.io.IOException;
+import java.util.*;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
@@ -60,11 +64,19 @@ public class UserRestController {
 
     @GetMapping("/v1/user/self")
     public ResponseEntity<String> login(Authentication authentication) throws JsonProcessingException {
+
+        Logger logger = Logger.getLogger(this.getClass().getName());
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
         UserEntity user = userRepository.findByUsername(authentication.getName())
                                         .orElseThrow(() -> new UsernameNotFoundException("Username is not found"));
-        // Log the user information
-        Logger logger = Logger.getLogger(this.getClass().getName());
+
+        // check if user is verified, if user is not verified return HTTP Status 403 Forbidden
+        if (user.getVerificationStatus() == null || !user.getVerificationStatus().equals("verified")) {
+            logger.warning("Http 403 Forbidden - User is not verified");
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         logger.info("Http 200 OK - User logged in successfully");
         logger.info("User logged in: " + user.toString());
 
@@ -74,7 +86,7 @@ public class UserRestController {
 
     @PutMapping("/v1/user/self")
     public ResponseEntity<String> update(Authentication authentication, @RequestBody JsonNode requestBody) {
-        // Log the user information
+
         Logger logger = Logger.getLogger(this.getClass().getName());
 
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
@@ -96,7 +108,7 @@ public class UserRestController {
         // set auth
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // Cannot update username
+        // cannot update username
         if (!updatedUser.getUsername().equals(authentication.getName())) {
             logger.warning("Http 400  Bad request -Cannot update username");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -104,6 +116,12 @@ public class UserRestController {
 
         UserEntity user = userRepository.findByUsername(authentication.getName())
                                         .orElseThrow(() -> new UsernameNotFoundException("Username is not found"));
+
+        // check if user is verified, if user is not verified return HTTP Status 403 Forbidden
+        if (user.getVerificationStatus() == null || !user.getVerificationStatus().equals("verified")) {
+            logger.warning("Http 403 Forbidden - User is not verified");
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
 
         if (updatedUser.getFirstName() != null) user.setFirstName(updatedUser.getFirstName());
         if (updatedUser.getLastName() != null) user.setLastName(updatedUser.getLastName());
@@ -125,8 +143,8 @@ public class UserRestController {
     }
 
     @PostMapping("/v1/user")
-    public ResponseEntity<String> register(@RequestBody JsonNode requestBody) throws JsonProcessingException {
-        // Log the user information
+    public ResponseEntity<String> register(@RequestBody JsonNode requestBody) throws IOException {
+
         Logger logger = Logger.getLogger(this.getClass().getName());
 
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
@@ -157,9 +175,9 @@ public class UserRestController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-
         // check fields that are not allowed to be updated like account_created and account_updated
         if (theUser.getAccountUpdated() != null || theUser.getAccountCreated() != null) {
+            logger.warning("Http 400 Bad request - Fields that are not allowed to be updated");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -170,15 +188,52 @@ public class UserRestController {
 
         userRepository.save(newUser);
 
+        // create a JSON payload
+        Map<String, String> payload = new HashMap<>();
+        payload.put("userId", newUser.getId().toString());
+        payload.put("email", newUser.getUsername());
+        payload.put("firstName", newUser.getFirstName());
+        payload.put("lastName", newUser.getLastName());
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        String jsonPayload = objectMapper.writeValueAsString(payload);
+
+        // Create a Pub/Sub message with the JSON payload as the data
+        PubsubMessage pubsubMessage = PubsubMessage.newBuilder()
+                                                   .setData(ByteString.copyFromUtf8(jsonPayload))
+                                                   .build();
+
+        ProjectTopicName topicName = ProjectTopicName.of("dev-project-415121", "verify_email");
+        Publisher publisher = Publisher.newBuilder(topicName).build();
+        publisher.publish(pubsubMessage);
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
-
 
         logger.info("Http 201 - User Created Successfully");
         logger.info("User created in: " + newUser.toString());
 
         // return HttpStatus.CREATED status and user information
         String json = objectMapper.writeValueAsString(newUser);
+
         return ResponseEntity.status(HttpStatus.CREATED).contentType(MediaType.APPLICATION_JSON).body(json);
+    }
+
+    @GetMapping("/verify")
+    public ResponseEntity<String> verifyEmail(@RequestParam String token) {
+
+        Logger logger = Logger.getLogger(this.getClass().getName());
+
+        UserEntity user = userRepository.findByVerificationToken(token);
+        if (user != null && user.getVerificationTokenExpiration().after(new Date())) {
+            logger.info("User's email is verified successfully");
+            user.setVerificationStatus("verified");
+            userRepository.save(user);
+            return ResponseEntity.ok("Email verified successfully");
+        } else {
+            logger.warning("Invalid or expired verification.");
+            return ResponseEntity.badRequest().body("Invalid or expired verification.");
+        }
     }
 }

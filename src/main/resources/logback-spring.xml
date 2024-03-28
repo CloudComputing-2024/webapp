@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <appender name="LogFile" class="ch.qos.logback.core.FileAppender">
-        <file>/var/log/webapp/webapp.log</file>
+        <file>/tmp/webapp.log</file>
+<!--        <file>/var/log/webapp/webapp.log</file>-->
         <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
             <prettyPrint>true</prettyPrint>
             <providers>
