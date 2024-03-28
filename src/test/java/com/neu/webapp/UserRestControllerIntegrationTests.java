@@ -45,6 +45,7 @@ public class    UserRestControllerIntegrationTests {
 
         String postUrl = "http://localhost:" + port + "/v1/user";
 
+
         // new user's information
         String newUserInfo = "{\"username\":\"test@gmail.com\",\"password\":\"test_password\",\"first_name\":\"test_firstname\",\"last_name\":\"test_lastname\",\"verification_status\":\"verified\"}";
 
