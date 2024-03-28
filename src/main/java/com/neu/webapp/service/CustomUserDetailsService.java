@@ -3,6 +3,8 @@ package com.neu.webapp.service;
 import com.neu.webapp.entity.Role;
 import com.neu.webapp.entity.UserEntity;
 import com.neu.webapp.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

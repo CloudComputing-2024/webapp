@@ -122,6 +122,9 @@ public class UserEntity {
                 ", username='" + username + '\'' +
                 ", account_created=" + accountCreated +
                 ", account_updated=" + accountUpdated +
+                ", verification_token=" + verificationToken +
+                ", verification_status=" + verificationStatus +
+                ", verificationToken_expiration=" + verificationTokenExpiration +
                 '}';
     }
 }

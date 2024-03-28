@@ -28,7 +28,7 @@ public class    UserRestControllerIntegrationTests {
     private UserRepository userRepository;
 
     @AfterAll
-     void cleanupTestData() {
+    void cleanupTestData() {
         Optional<UserEntity> user = userRepository.findByUsername("test@gmail.com");
 
         if (user.isPresent()) {
@@ -46,7 +46,7 @@ public class    UserRestControllerIntegrationTests {
         String postUrl = "http://localhost:" + port + "/v1/user";
 
         // new user's information
-        String newUserInfo = "{\"username\":\"test@gmail.com\",\"password\":\"test_password\",\"first_name\":\"test_firstname\",\"last_name\":\"test_lastname\"}";
+        String newUserInfo = "{\"username\":\"test@gmail.com\",\"password\":\"test_password\",\"first_name\":\"test_firstname\",\"last_name\":\"test_lastname\",\"verification_status\":\"verified\"}";
 
         // use POST call to create an account
         RestAssured

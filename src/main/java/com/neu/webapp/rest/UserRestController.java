@@ -24,6 +24,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -186,6 +187,10 @@ public class UserRestController {
         Role userRole = new Role("USER");
         newUser.setRoles(new ArrayList<>(Collections.singletonList(userRole)));
 
+        if(theUser.getVerificationStatus().equals("verified")){
+            newUser.setVerificationStatus("verified");
+        }
+
         userRepository.save(newUser);
 
         // create a JSON payload
@@ -220,6 +225,7 @@ public class UserRestController {
         return ResponseEntity.status(HttpStatus.CREATED).contentType(MediaType.APPLICATION_JSON).body(json);
     }
 
+    @Transactional
     @GetMapping("/verify")
     public ResponseEntity<String> verifyEmail(@RequestParam String token) {
 
