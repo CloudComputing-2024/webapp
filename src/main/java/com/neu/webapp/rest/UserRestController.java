@@ -195,10 +195,8 @@ public class UserRestController {
 
         // create a JSON payload
         Map<String, String> payload = new HashMap<>();
-        payload.put("userId", newUser.getId().toString());
-        payload.put("email", newUser.getUsername());
+        payload.put("username", newUser.getUsername());
         payload.put("firstName", newUser.getFirstName());
-        payload.put("lastName", newUser.getLastName());
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
