@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.cloud.pubsub.v1.Publisher;
@@ -16,6 +15,7 @@ import com.neu.webapp.entity.UserEntity;
 import com.neu.webapp.repository.RoleRepository;
 import com.neu.webapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,7 +25,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -51,6 +50,12 @@ public class UserRestController {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Value("${GOOGLE_CLOUD_PROJECT}")
+    private String projectId;
+
+    @Value("${PUBSUB_TOPIC}")
+    private String topicId;
 
     // Define the email pattern
     private static final Pattern emailPattern = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
@@ -220,7 +225,7 @@ public class UserRestController {
                                                    .setData(ByteString.copyFromUtf8(jsonPayload))
                                                    .build();
 
-        ProjectTopicName topicName = ProjectTopicName.of("dev-project-415121", "verify_email");
+        ProjectTopicName topicName = ProjectTopicName.of(projectId, topicId);
         Publisher publisher = Publisher.newBuilder(topicName).build();
         publisher.publish(pubsubMessage);
 
