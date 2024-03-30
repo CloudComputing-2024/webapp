@@ -1,5 +1,6 @@
 package com.neu.webapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
@@ -49,10 +50,12 @@ public class UserEntity {
 
     @JsonProperty("account_created")
     @Column(name = "account_created")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
     private ZonedDateTime accountCreated;
 
     @JsonProperty("account_updated")
     @Column(name = "account_updated")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
     private ZonedDateTime accountUpdated;
 
     @JsonProperty("verification_token")
@@ -120,8 +123,8 @@ public class UserEntity {
                 ", first_name='" + firstName + '\'' +
                 ", last_name='" + lastName + '\'' +
                 ", username='" + username + '\'' +
-                ", account_created=" + accountCreated +
-                ", account_updated=" + accountUpdated +
+                ", account_created=" + accountCreated.toString() +
+                ", account_updated=" + accountUpdated.toString() +
                 ", verification_token=" + verificationToken +
                 ", verification_status=" + verificationStatus +
                 ", verificationToken_expiration=" + verificationTokenExpiration +

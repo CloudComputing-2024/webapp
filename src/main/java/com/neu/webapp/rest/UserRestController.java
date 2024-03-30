@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.cloud.pubsub.v1.Publisher;
@@ -67,15 +68,21 @@ public class UserRestController {
     public ResponseEntity<String> login(Authentication authentication) throws JsonProcessingException {
 
         Logger logger = Logger.getLogger(this.getClass().getName());
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        UserEntity user = userRepository.findByUsername(authentication.getName())
-                                        .orElseThrow(() -> new UsernameNotFoundException("Username is not found"));
 
-        // check if user is verified, if user is not verified return HTTP Status 403 Forbidden
-        if (user.getVerificationStatus() == null || !user.getVerificationStatus().equals("verified")) {
+        UserEntity user = userRepository.findByUsername(authentication.getName())
+                                        .orElse(null);
+
+        // Check if user exists and if user is verified
+        if (user != null && (user.getVerificationStatus() == null || !user.getVerificationStatus().equals("verified"))) {
             logger.warning("Http 403 Forbidden - User is not verified");
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
+        // Check if user exists
+        if (user == null) {
+            logger.severe("Username is not found");
+            throw new UsernameNotFoundException("Username is not found");
         }
 
         logger.info("Http 200 OK - User logged in successfully");
@@ -89,8 +96,25 @@ public class UserRestController {
     public ResponseEntity<String> update(Authentication authentication, @RequestBody JsonNode requestBody) {
 
         Logger logger = Logger.getLogger(this.getClass().getName());
-
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
+
+        // set auth
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        UserEntity user = userRepository.findByUsername(authentication.getName())
+                                        .orElse(null);
+
+        // Check if user exists and if user is verified
+        if (user != null && (user.getVerificationStatus() == null || !user.getVerificationStatus().equals("verified"))) {
+            logger.warning("Http 403 Forbidden - User is not verified");
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
+        // Check if user exists
+        if (user == null) {
+            logger.severe("Username is not found");
+            throw new UsernameNotFoundException("Username is not found");
+        }
 
         // declare a UserEntity object
         UserEntity updatedUser;
@@ -106,23 +130,12 @@ public class UserRestController {
             throw new IllegalArgumentException();
         }
 
-        // set auth
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
         // cannot update username
         if (!updatedUser.getUsername().equals(authentication.getName())) {
             logger.warning("Http 400  Bad request -Cannot update username");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        UserEntity user = userRepository.findByUsername(authentication.getName())
-                                        .orElseThrow(() -> new UsernameNotFoundException("Username is not found"));
-
-        // check if user is verified, if user is not verified return HTTP Status 403 Forbidden
-        if (user.getVerificationStatus() == null || !user.getVerificationStatus().equals("verified")) {
-            logger.warning("Http 403 Forbidden - User is not verified");
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
 
         if (updatedUser.getFirstName() != null) user.setFirstName(updatedUser.getFirstName());
         if (updatedUser.getLastName() != null) user.setLastName(updatedUser.getLastName());
@@ -223,7 +236,6 @@ public class UserRestController {
         return ResponseEntity.status(HttpStatus.CREATED).contentType(MediaType.APPLICATION_JSON).body(json);
     }
 
-    @Transactional
     @GetMapping("/verify")
     public ResponseEntity<String> verifyEmail(@RequestParam String token) {
 
