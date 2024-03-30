@@ -14,7 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @SpringBootTest(
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,properties = {
+        "GOOGLE_CLOUD_PROJECT=dev-project-415121",
+        "PUBSUB_TOPIC=verify_email"
+}
+
 )
 @Transactional
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
