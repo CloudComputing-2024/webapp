@@ -64,6 +64,7 @@ public class UserEntity {
 
     @JsonProperty("verification_token_expiration")
     @Column (name = "verification_token_expiration")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS",timezone = "America/Los_Angeles")
     private Date verificationTokenExpiration;
 
     @JsonProperty("verification_status")
