@@ -144,7 +144,7 @@ jobs:
           --version=template=${{env.PROJECT_ID}}  \
           --type=proactive \
           --zone=us-west1-a \
-          --min-ready=3m
+          --min-ready=3m 
 
       - name: Wait for instances to be recreated
         run: |
