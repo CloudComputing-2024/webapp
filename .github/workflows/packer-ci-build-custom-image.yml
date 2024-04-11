@@ -124,11 +124,11 @@ jobs:
             --tags=allow-https,allow-health-check,disallow-ssh \
             --metadata-from-file startup-script=startup-script.sh \
             --service-account=${{ env.SERVICE_ACCOUNT }} \
-            --service-account-scopes=cloud-platform \
+            --scopes=cloud-platform \
             --boot-disk-size=10GB\
             --boot-disk-type=pd-standard\
             --disk=auto-delete=true,boot=yes\
-            --kms-key=${{ env.KMS_KEY }}
+            --boot-disk-kms-key=${{ env.KMS_KEY }}
 
       - name: Recreate instances in managed instance group
         run: |
