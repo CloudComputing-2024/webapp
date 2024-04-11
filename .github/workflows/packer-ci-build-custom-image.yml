@@ -129,15 +129,21 @@ jobs:
             --boot-disk-type=pd-standard\
             --boot-disk-kms-key=${{ env.KMS_KEY }}
 
+      - name: Update instance group with new template
+        run: |
+          gcloud compute instance-groups managed set-instance-template webapp-igm \
+          --project=${{env.PROJECT_ID}} \
+          --region=us-west1 \
+          --template=dev-project-instance-template-${GITHUB_SHA:0:8}
+
       - name: Recreate instances in managed instance group
         run: |
           gcloud compute instance-groups managed rolling-action replace webapp-igm \
           --project=${{env.PROJECT_ID}} \
           --zone=us-west1-a \
-          --max-unavailable=1 \
-          --max-surge=0 \
+          --max-unavailable=3 \
+          --max-surge=3\
           --replacement-method=recreate
-          
 
       - name: Wait for instances to be recreated
         run: |
