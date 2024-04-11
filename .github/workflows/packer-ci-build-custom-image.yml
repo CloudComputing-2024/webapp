@@ -120,12 +120,11 @@ jobs:
           gcloud compute instance-templates create dev-project-instance-template-${GITHUB_SHA:0:8} \
             --image=${{ env.IMAGE_NAME }} \
             --region=us-west1 \
-            --machine-type=e2-standard-2 \
+            --machine-type=e2-highmem-2 \
             --tags=allow-https,allow-health-check,disallow-ssh \
             --metadata-from-file startup-script=startup-script.sh \
             --service-account=${{ env.SERVICE_ACCOUNT }} \
             --scopes=cloud-platform \
-            --boot-disk-size=100GB\
             --boot-disk-type=pd-standard\
             --boot-disk-kms-key=${{ env.KMS_KEY }}
 
@@ -133,7 +132,7 @@ jobs:
         run: |
           gcloud compute instance-groups managed set-instance-template webapp-igm \
           --project=${{env.PROJECT_ID}} \
-          --region=us-west1 \
+          --zone=us-west1-a \
           --template=dev-project-instance-template-${GITHUB_SHA:0:8}
 
       - name: Recreate instances in managed instance group
