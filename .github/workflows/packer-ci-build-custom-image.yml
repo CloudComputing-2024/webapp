@@ -13,6 +13,11 @@ jobs:
       DB_DATABASE: web_application
       DB_USER: webapplication
       DB_PASSWORD: webapplication
+      PROJECT_ID: ${{secrets.PROJECT_ID}}
+      VM_KEY: ${{secrets.VM_KEY}}
+      SERVICE_ACCOUNT: ${{secrets.SERVICE_ACCOUNT}}
+      CLOUD_SQL_INSTANCE: ${{secrets.CLOUD_SQL_INSTANCE}}
+      KMS_KEY: ${{secrets.KMS_KEY}}
 
     steps:
 
@@ -61,8 +66,8 @@ jobs:
           sudo mkdir -p /var/log/webapp
           sudo chmod 777 /var/log/webapp
 
-#      - name: Run integration tests
-#        run: mvn test -Dtest=UserRestControllerIntegrationTests
+      - name: Run integration tests
+        run: mvn test -Dtest=UserRestControllerIntegrationTests
 
       - name: Build application artifact
         run: |
@@ -86,3 +91,47 @@ jobs:
           packer init .
           packer build -var-file=variables.pkrvars.hcl gcp.pkr.hcl
         working-directory: ./packer
+
+      - name: Get the image name
+        run: |
+          IMAGE_NAME=$(gcloud compute images list --filter="name~'dev-project-custom-image-.*'" --sort-by="~creationTimestamp" --limit=1 --format="get(name)")
+          echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
+
+      - name: Generate random password
+        run: |
+          sudo apt-get install -y pwgen
+          PASSWORD=$(pwgen -s 8 1)
+          echo "RANDOM_PASSWORD=$PASSWORD" >> $GITHUB_ENV
+
+      - name: Create startup script
+        run: |
+          sudo echo '#!/bin/bash' > startup-script.sh
+          sudo echo 'set -e' >> startup-script.sh 
+          sudo echo "spring.datasource.url=jdbc:mysql://google/webapp?cloudSqlInstance=${{env.CLOUD_SQL_INSTANCE}}&socketFactory=com.google.cloud.sql.mysql.SocketFactory" >> startup-script.sh
+          sudo echo "spring.cloud.gcp.sql.database-name=webapp" >> startup-script.sh
+          sudo echo "spring.datasource.username=webapp" >> startup-script.sh
+          sudo echo "spring.sql.init.mode=never" >> startup-script.sh  
+          sudo echo "spring.datasource.password=${{env.RANDOM_PASSWORD}}" >> startup-script.sh
+          sudo echo "GOOGLE_CLOUD_PROJECT=${{env.PROJECT_ID}}" >> startup-script.sh
+          sudo echo "PUBSUB_TOPIC=verify_email" >> startup-script.sh
+
+      - name: Create new instance template
+        run: |
+          gcloud compute instance-templates create dev-project-instance-template-${{ github.sha }} \
+            --image=${{ env.IMAGE_NAME }} \
+            --region=us-west1 \
+            --machine-type=e2-standard-2 \
+            --tags=allow-https,allow-health-check,disallow-ssh \
+            --metadata-from-file startup-script=startup-script.sh \
+            --service-account=${{ env.SERVICE_ACCOUNT }} \
+            --service-account-scopes=cloud-platform \
+            --disk=auto-delete=true,boot=yes,image=${{ env.IMAGE_NAME }},disk-type=pd-standard,disk-size=10GB \
+            --disk-encryption-key=key-self-link=${{ env.KMS_KEY }}
+
+      - name: Recreate instances in managed instance group
+        run: |
+          gcloud compute instance-groups managed rolling-action replace webapp-igm --region=us-west1 --max-unavailable=1 --replacement-method=recreate
+
+      - name: Wait for instances to be recreated
+        run: |
+          gcloud compute instance-groups managed wait-until-stable webapp-igm --region=us-west1
