@@ -139,14 +139,15 @@ jobs:
           --template=dev-project-instance-template-${GITHUB_SHA:0:8}
 
       - name: Recreate instances in managed instance group
-        run: |
-          gcloud compute instance-groups managed rolling-action replace webapp-igm \
-          --project=${{env.PROJECT_ID}} \
+        run: |       
+          gcloud compute instance-groups managed rolling-action start-update webapp-igm \
+          --version=template=${{env.PROJECT_ID}}  \
+          --type=proactive \
           --zone=us-west1-a \
-          --max-unavailable=3 \
-          --max-surge=0 \
-          --replacement-method=recreate
+          --min-ready=3m
 
       - name: Wait for instances to be recreated
         run: |
-          gcloud compute instance-groups managed wait-until --stable webapp-igm --zone=us-west1-a
+          gcloud compute instance-groups managed wait-until webapp-igm \
+          --version-target-reached \
+          --zone=us-west1-a
