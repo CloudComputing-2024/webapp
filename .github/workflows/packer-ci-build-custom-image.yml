@@ -133,7 +133,7 @@ jobs:
         run: |
           gcloud compute instance-groups managed rolling-action replace webapp-igm \
           --project=${{env.PROJECT_ID}} \
-          --region=us-west1 \
+          --zone=us-west1-a \
           --max-unavailable=1 \
           --replacement-method=recreate
 
