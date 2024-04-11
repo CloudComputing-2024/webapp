@@ -127,7 +127,7 @@ jobs:
             --scopes=cloud-platform \
             --boot-disk-size=10GB\
             --boot-disk-type=pd-standard\
-            --disk=auto-delete=true,boot=yes\
+            --disk=name=webapp-regional-disk,boot=yes,auto-delete=yes,mode=rw\
             --boot-disk-kms-key=${{ env.KMS_KEY }}
 
       - name: Recreate instances in managed instance group
