@@ -14,10 +14,10 @@ jobs:
       DB_USER: webapplication
       DB_PASSWORD: webapplication
       PROJECT_ID: ${{secrets.PROJECT_ID}}
-      VM_KEY: ${{secrets.VM_KEY}}
       SERVICE_ACCOUNT: ${{secrets.SERVICE_ACCOUNT}}
       CLOUD_SQL_INSTANCE: ${{secrets.CLOUD_SQL_INSTANCE}}
       KMS_KEY: ${{secrets.KMS_KEY}}
+      VM_KEY: ${{secrets.VM_KEY}}
 
     steps:
 
