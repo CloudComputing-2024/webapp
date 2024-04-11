@@ -125,7 +125,7 @@ jobs:
             --metadata-from-file startup-script=startup-script.sh \
             --service-account=${{ env.SERVICE_ACCOUNT }} \
             --service-account-scopes=cloud-platform \
-            --disk=auto-delete=true,boot=yes,image=${{ env.IMAGE_NAME }},disk-type=pd-standard,disk-size=10GB \
+            --disk=auto-delete=true,boot=yes,disk-type=pd-standard,disk-size=10GB \
             --disk-encryption-key=key-self-link=${{ env.KMS_KEY }}
 
       - name: Recreate instances in managed instance group
