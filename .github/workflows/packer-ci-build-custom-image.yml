@@ -126,8 +126,10 @@ jobs:
             --metadata-from-file startup-script=startup-script.sh \
             --service-account=${{ env.SERVICE_ACCOUNT }} \
             --scopes=cloud-platform \
-            --boot-disk-type=pd-standard\
-            --boot-disk-kms-key=${{ env.KMS_KEY }}
+            --boot-disk-type=pd-standard \
+            --boot-disk-kms-key=${{ env.KMS_KEY }} \
+            --network=vpc \
+            --subnet=webapp
 
       - name: Update instance group with new template
         run: |
