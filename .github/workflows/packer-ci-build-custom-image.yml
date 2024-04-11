@@ -135,7 +135,9 @@ jobs:
           --project=${{env.PROJECT_ID}} \
           --zone=us-west1-a \
           --max-unavailable=1 \
+          --max-surge=0 \
           --replacement-method=recreate
+          
 
       - name: Wait for instances to be recreated
         run: |
