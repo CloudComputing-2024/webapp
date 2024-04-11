@@ -13,6 +13,7 @@ jobs:
       DB_DATABASE: web_application
       DB_USER: webapplication
       DB_PASSWORD: webapplication
+
       PROJECT_ID: ${{secrets.PROJECT_ID}}
       SERVICE_ACCOUNT: ${{secrets.SERVICE_ACCOUNT}}
       CLOUD_SQL_INSTANCE: ${{secrets.CLOUD_SQL_INSTANCE}}
