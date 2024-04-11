@@ -141,4 +141,4 @@ jobs:
 
       - name: Wait for instances to be recreated
         run: |
-          gcloud compute instance-groups managed wait-until-stable webapp-igm --region=us-west1
+          gcloud compute instance-groups managed wait-until --stable webapp-igm --zone=us-west1-a
