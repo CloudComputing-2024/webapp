@@ -131,7 +131,11 @@ jobs:
 
       - name: Recreate instances in managed instance group
         run: |
-          gcloud compute instance-groups managed rolling-action replace webapp-igm --region=us-west1 --max-unavailable=1 --replacement-method=recreate
+          gcloud compute instance-groups managed rolling-action replace webapp-igm \
+          --project=${{env.PROJECT_ID}} \
+          --region=us-west1 \
+          --max-unavailable=1 \
+          --replacement-method=recreate
 
       - name: Wait for instances to be recreated
         run: |
