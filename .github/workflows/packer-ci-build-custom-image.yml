@@ -141,7 +141,7 @@ jobs:
       - name: Recreate instances in managed instance group
         run: |       
           gcloud compute instance-groups managed rolling-action start-update webapp-igm \
-          --version=template=${{env.PROJECT_ID}}  \
+          --version=template=dev-project-instance-template-${GITHUB_SHA:0:8} \
           --type=proactive \
           --zone=us-west1-a 
 
