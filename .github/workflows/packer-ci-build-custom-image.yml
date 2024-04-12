@@ -1,4 +1,4 @@
-name: Packer CI Build Custom Image
+name: CI/CD for Web Application
 
 on:
   push:
