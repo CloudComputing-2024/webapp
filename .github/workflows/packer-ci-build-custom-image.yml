@@ -148,3 +148,8 @@ jobs:
           gcloud compute instance-groups managed wait-until webapp-igm \
           --version-target-reached \
           --zone=us-west1-a
+
+      - name: Check Status and current actions on all instances in the group
+        run: |
+          gcloud compute instance-groups managed list-instances webapp-igm \
+          --zone=us-west1-a
