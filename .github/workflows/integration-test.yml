@@ -47,8 +47,8 @@ jobs:
       - name: Clean Project
         run: mvn clean
 
-#      - name: Test with Maven
-#        run: mvn test -Dtest=UserRestControllerIntegrationTests
+      - name: Test with Maven
+        run: mvn test -Dtest=UserRestControllerIntegrationTests
 #
 #      - name: Upload log file on failure
 #        if: failure()
