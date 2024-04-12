@@ -33,8 +33,8 @@ public class SecurityConfigurer { // define a Spring Security configuration clas
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/v1/user/self").authenticated()
-                        .requestMatchers("/v1/user").permitAll()
+                        .requestMatchers("/v2/user/self").authenticated()
+                        .requestMatchers("/v2/user").permitAll()
                         .requestMatchers("/healthz").permitAll()
                         .requestMatchers("/verify").permitAll()
                         .anyRequest().authenticated()
