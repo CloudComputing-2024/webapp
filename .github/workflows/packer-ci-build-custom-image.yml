@@ -143,8 +143,7 @@ jobs:
           gcloud compute instance-groups managed rolling-action start-update webapp-igm \
           --version=template=${{env.PROJECT_ID}}  \
           --type=proactive \
-          --zone=us-west1-a \
-          --min-ready=3m
+          --zone=us-west1-a 
 
       - name: Wait for instances to be recreated
         run: |
