@@ -17,6 +17,7 @@ jobs:
       PROJECT_ID: ${{secrets.PROJECT_ID}}
       SERVICE_ACCOUNT: ${{secrets.SERVICE_ACCOUNT}}
       CLOUD_SQL_INSTANCE: ${{secrets.CLOUD_SQL_INSTANCE}}
+      DATABASE_PASSWORD: ${{secrets.DATABASE_PASSWORD}}
       KMS_KEY: ${{secrets.KMS_KEY}}
       VM_KEY: ${{secrets.VM_KEY}}
 
@@ -98,11 +99,6 @@ jobs:
           IMAGE_NAME=$(gcloud compute images list --filter="name~'dev-project-custom-image-.*'" --sort-by="~creationTimestamp" --limit=1 --format="get(name)")
           echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
 
-      - name: Generate random password
-        run: |
-          sudo apt-get install -y pwgen
-          PASSWORD=$(pwgen -s 8 1)
-          echo "RANDOM_PASSWORD=$PASSWORD" >> $GITHUB_ENV
 
       - name: Create startup script
         run: |
@@ -112,7 +108,7 @@ jobs:
           sudo echo "sudo echo \"spring.cloud.gcp.sql.database-name=webapp\" >> /opt/webapp/application.properties" >> startup-script.sh
           sudo echo "sudo echo \"spring.datasource.username=webapp\" >> /opt/webapp/application.properties" >> startup-script.sh
           sudo echo "sudo echo \"spring.sql.init.mode=never\" >> /opt/webapp/application.properties" >> startup-script.sh
-          sudo echo "sudo echo \"spring.datasource.password=${{env.RANDOM_PASSWORD}}\" >> /opt/webapp/application.properties" >> startup-script.sh
+          sudo echo "sudo echo \"spring.datasource.password=${{env.DATABASE_PASSWORD}}\" >> /opt/webapp/application.properties" >> startup-script.sh
           sudo echo "sudo echo \"GOOGLE_CLOUD_PROJECT=${{env.PROJECT_ID}}\" >> /opt/webapp/application.properties" >> startup-script.sh
           sudo echo "sudo echo \"PUBSUB_TOPIC=verify_email\" >> /opt/webapp/application.properties" >> startup-script.sh
           sudo echo "sudo chown -R csye6225:csye6225 /opt/webapp/application.properties" >> startup-script.sh
