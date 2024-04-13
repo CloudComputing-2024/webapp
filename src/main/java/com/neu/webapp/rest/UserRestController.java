@@ -70,7 +70,7 @@ public class UserRestController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @GetMapping("/v2/user/self")
+    @GetMapping("/v1/user/self")
     public ResponseEntity<String> login(Authentication authentication) throws JsonProcessingException {
 
         Logger logger = Logger.getLogger(this.getClass().getName());
@@ -98,7 +98,7 @@ public class UserRestController {
         return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(json);
     }
 
-    @PutMapping("/v2/user/self")
+    @PutMapping("/v1/user/self")
     public ResponseEntity<String> update(Authentication authentication, @RequestBody JsonNode requestBody) {
 
         Logger logger = Logger.getLogger(this.getClass().getName());
@@ -162,7 +162,7 @@ public class UserRestController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PostMapping("/v2/user")
+    @PostMapping("/v1/user")
     public ResponseEntity<String> register(@RequestBody JsonNode requestBody) throws IOException {
 
         Logger logger = Logger.getLogger(this.getClass().getName());

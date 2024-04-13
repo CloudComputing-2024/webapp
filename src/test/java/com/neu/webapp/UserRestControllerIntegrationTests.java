@@ -47,7 +47,7 @@ public class    UserRestControllerIntegrationTests {
     @Order(1)
     void testCreateUserAndValidateUser() {
 
-        String postUrl = "http://localhost:" + port + "/v2/user";
+        String postUrl = "http://localhost:" + port + "/v1/user";
 
 
         // new user's information
@@ -63,7 +63,7 @@ public class    UserRestControllerIntegrationTests {
                 .then()
                 .statusCode(201).extract();
 
-        String getUrl = "http://localhost:" + port + "/v2/user/self";
+        String getUrl = "http://localhost:" + port + "/v1/user/self";
 
         // use the GET call to validate account exists
         RestAssured
@@ -86,7 +86,7 @@ public class    UserRestControllerIntegrationTests {
     @Order(2)
     void testUpdateAndValidateUser() {
 
-        String putUrl = "http://localhost:" + port + "/v2/user/self";
+        String putUrl = "http://localhost:" + port + "/v1/user/self";
 
         // updated user's information
         String updatedUserInfo = "{\"username\":\"test@gmail.com\",\"password\":\"updatePassword\",\"first_name\":\"update_firstname\",\"last_name\":\"update_lastname\"}";
