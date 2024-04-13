@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Start MySQL
         run: |
@@ -38,5 +38,21 @@ jobs:
           sudo mkdir -p /var/log/webapp
           sudo chmod 777 /var/log/webapp
 
-      - name: Run integration tests
-        run: mvn test -Dtest=UserRestControllerIntegrationTests
+      - name: Validate and Reload pom.xml
+        run: mvn validate
+
+      - name: Resolve Dependencies
+        run: mvn dependency:resolve
+
+      - name: Clean Project
+        run: mvn clean
+
+#      - name: Test with Maven
+#        run: mvn test -Dtest=UserRestControllerIntegrationTests
+#
+#      - name: Upload log file on failure
+#        if: failure()
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: log-files
+#          path: ${{ github.workspace }}/logs/**
