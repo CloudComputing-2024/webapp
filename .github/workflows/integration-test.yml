@@ -33,26 +33,17 @@ jobs:
           distribution: 'oracle'
           cache: maven
 
+      - name: Cache Maven packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
       - name: Create Log Directory
         run: |
           sudo mkdir -p /var/log/webapp
           sudo chmod 777 /var/log/webapp
 
-      - name: Validate and Reload pom.xml
-        run: mvn validate
-
-      - name: Resolve Dependencies
-        run: mvn dependency:resolve
-
-      - name: Clean Project
-        run: mvn clean
-
-#      - name: Test with Maven
-#        run: mvn test -Dtest=UserRestControllerIntegrationTests
-#
-#      - name: Upload log file on failure
-#        if: failure()
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: log-files
-#          path: ${{ github.workspace }}/logs/**
+      - name: Run integration tests
+        run: mvn test -Dtest=UserRestControllerIntegrationTests
