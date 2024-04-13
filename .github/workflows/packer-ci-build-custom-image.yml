@@ -124,7 +124,7 @@ jobs:
       - name: Update instance group with new template
         run: |
           gcloud compute instance-groups managed set-instance-template webapp-igm \
-          --project=${{secrets.PROJECT_ID}}\
+          --project=${{secrets.PROJECT_ID}} \
           --zone=us-west1-a \
           --template=dev-project-instance-template-${GITHUB_SHA:0:8}
 
