@@ -1,4 +1,4 @@
-name: CI/CD for Web Application Workflow
+name: CI/CD for Web Application
 
 on:
   push:
